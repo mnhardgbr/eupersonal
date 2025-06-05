@@ -218,6 +218,8 @@
         msg.style.color = 'green';
       }
     };
+
+    supabase.auth.signInWithOAuth({ provider: 'google' })
   </script>
 </body>
 </html> 
