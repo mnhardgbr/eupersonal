@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0e1624">
+  <title>Meus Treinos - Eu Personal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css">
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="https://cdn.remixicon.com/releases/2.5.0/remixicon.css">
+  <style>
+    body, .page {
+      background-color: #0e1624;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .page-content {
+      padding-bottom: 80px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #1e2a3a;
+      margin-bottom: 16px;
+    }
+
+    .user-info {
+      color: #ffffff;
+      padding: 0 16px;
+    }
+
+    .user-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .user-details {
+      font-size: 0.9em;
+      color: #9faab7;
+    }
+
+    .treino-card {
+      background: #1e2a3a;
+      border-radius: 12px;
+      margin: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .treino-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .treino-title {
+      color: #ffffff;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+
+    .treino-dia {
+      color: #2196f3;
+      font-size: 0.9em;
+      background: rgba(33, 150, 243, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .exercicio-item {
+      background: #2d3e50;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .exercicio-nome {
+      color: #ffffff;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .exercicio-detalhes {
+      color: #9faab7;
+      font-size: 0.9em;
+    }
+
+    .treino-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .action-button {
+      flex: 1;
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .action-button.secondary {
+      background: #2d3e50;
+    }
+
+    .action-button:hover {
+      opacity: 0.9;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: #9faab7;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      color: #2196f3;
+    }
+
+    .empty-state-text {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+    }
+
+    .empty-state-subtext {
+      font-size: 0.9em;
+      color: #6c7a89;
+    }
+
+    .fab-button {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 28px;
+      background: #2196f3;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+      border: none;
+      cursor: pointer;
+    }
+
+    .fab-button i {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page" data-name="treinos">
+    <div class="page-content">
+      <!-- Header com informações do usuário -->
+      <div class="header-container">
+        <a href="../pages/home.html" class="back-btn" style="color: #2196f3; font-size: 1.5em; text-decoration: none;">
+          <i class="ri-arrow-left-line"></i>
+        </a>
+        <div class="user-info">
+          <div class="user-name" id="userName">Carregando...</div>
+          <div class="user-details" id="userDetails">Carregando detalhes...</div>
+        </div>
+        <div style="width: 24px;"></div> <!-- Espaçador -->
+      </div>
+
+      <!-- Container dos treinos -->
+      <div id="treinosContainer">
+        <!-- Os treinos serão inseridos aqui via JavaScript -->
+      </div>
+
+      <!-- Estado vazio (será mostrado quando não houver treinos) -->
+      <div id="emptyState" class="empty-state" style="display: none; min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <img src="../img/logo.png" alt="Eu Personal" style="width: 170px; margin-bottom: 24px; margin-top: 16px;" />
+        <i class="ri-heart-pulse-line" style="font-size: 48px; color: #00e6ff; margin-bottom: 16px;"></i>
+        <div class="empty-state-text" style="font-size: 2em; font-weight: bold; color: #fff; margin-bottom: 12px;">Vamos começar seu treino!</div>
+        <div class="empty-state-subtext" style="font-size: 1.2em; color: #b0c4d4; margin-bottom: 32px;">Clique no botão abaixo para gerar seu treino personalizado.</div>
+        <button onclick="window.location.href='periodizacao.html'" style="background: #00e6ff; color: #0e1624; border: none; border-radius: 8px; padding: 16px 0; width: 90%; max-width: 340px; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 16px rgba(0,230,255,0.18); cursor: pointer;">GERAR TREINO</button>
+      </div>
+
+      <!-- Botão flutuante para gerar novo treino -->
+      <button class="fab-button" onclick="window.location.href='periodizacao.html'">
+        <i class="ri-add-line"></i>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script src="../js/exercicios.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  <script type="module" src="../js/treinos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Carregar dados do usuário
+      const dadosPeriodizacao = JSON.parse(localStorage.getItem('dadosPeriodizacao') || '{}');
+      const treinoGerado = JSON.parse(localStorage.getItem('treinoGerado') || '{}');
+      
+      // Atualizar informações do usuário
+      if (dadosPeriodizacao.nome) {
+        document.getElementById('userName').textContent = dadosPeriodizacao.nome;
+        document.getElementById('userDetails').textContent = 
+          `${dadosPeriodizacao.objetivo} • ${dadosPeriodizacao.nivel} • ${dadosPeriodizacao.modalidade}`;
+      }
+
+      // Verificar se há treinos
+      const treinosContainer = document.getElementById('treinosContainer');
+      const emptyState = document.getElementById('emptyState');
+
+      if (Object.keys(treinoGerado).length === 0) {
+        treinosContainer.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      // Renderizar treinos
+      treinosContainer.style.display = 'block';
+      emptyState.style.display = 'none';
+
+      // Exemplo de como renderizar um treino (será substituído pelo treino real)
+      const treinoCard = document.createElement('div');
+      treinoCard.className = 'treino-card';
+      treinoCard.innerHTML = `
+        <div class="treino-header">
+          <div class="treino-title">Treino A - Peito e Tríceps</div>
+          <div class="treino-dia">Segunda-feira</div>
+        </div>
+        <div class="exercicio-item">
+          <div class="exercicio-nome">Supino Reto</div>
+          <div class="exercicio-detalhes">4 séries x 12 repetições • 60s descanso</div>
+        </div>
+        <div class="exercicio-item">
+          <div class="exercicio-nome">Supino Inclinado</div>
+          <div class="exercicio-detalhes">3 séries x 12 repetições • 60s descanso</div>
+        </div>
+        <div class="treino-actions">
+          <button class="action-button">
+            <i class="ri-play-circle-line"></i>
+            Iniciar Treino
+          </button>
+          <button class="action-button secondary">
+            <i class="ri-edit-line"></i>
+            Editar
+          </button>
+        </div>
+      `;
+
+      treinosContainer.appendChild(treinoCard);
+
+      // Verificar se deve mostrar o toast de sucesso
+      if (localStorage.getItem('showTreinoToast') === '1') {
+        if (window.app && window.app.toast) {
+          window.app.toast.create({
+            text: '<span style="font-size:1.1em;font-weight:600;">✔ Treino gerado!</span><br>Seu treino personalizado está pronto.',
+            position: 'center',
+            closeTimeout: 2000,
+            cssClass: 'toast-sucesso-personalizado'
+          }).open();
+        }
+        localStorage.removeItem('showTreinoToast');
+      }
+    });
+  </script>
+</body>
+</html> 

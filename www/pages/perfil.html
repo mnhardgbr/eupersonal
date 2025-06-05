@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0e1624" />
+  <title>Perfil - Eu Personal</title>
+  
+  <!-- Framework7 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css" />
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="../css/index.css" />
+  <style>
+    /* Esconder barra de rolagem */
+    .page-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .page-content {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 80px;
+    }
+
+    .card-info {
+      background-color: #1e2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .card-info h2 {
+      color: #00d4ff;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .info-value {
+      color: #00d4ff;
+    }
+
+    .treino-info {
+      margin-top: 10px;
+    }
+
+    .treino-info p {
+      color: #ffffff;
+      margin: 8px 0;
+    }
+
+    .treino-info strong {
+      color: #00d4ff;
+    }
+
+    .atualizar-btn {
+      display: inline-block;
+      width: calc(100% - 32px);
+      padding: 12px 20px;
+      background: #ff3b30;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      margin: 16px;
+      text-align: center;
+    }
+
+    .atualizar-btn i {
+      margin-right: 8px;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .logo-eupersonal {
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="view view-main view-init tab tab-active" data-url="/perfil/">
+      <div class="page" data-name="perfil">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="../pages/home.html" class="link back">
+                <i class="ri-arrow-left-line"></i>
+              </a>
+            </div>
+            <div class="title">Meu Perfil</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="logo-container">
+            <img src="../img/logo.png" alt="Eu Personal" class="logo-eupersonal" />
+          </div>
+
+          <!-- Dados Pessoais -->
+          <div class="card-info">
+            <h2>Seus Dados</h2>
+            <div class="info-item">
+              <span class="info-label">Nome</span>
+              <span class="info-value" id="nome"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Idade</span>
+              <span class="info-value"><span id="idade"></span> anos</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Peso</span>
+              <span class="info-value"><span id="peso"></span> kg</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Nível</span>
+              <span class="info-value" id="nivel"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Objetivo</span>
+              <span class="info-value" id="objetivo"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Frequência</span>
+              <span class="info-value" id="frequencia"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">FC Máxima</span>
+              <span class="info-value"><span id="fc_maxima"></span> bpm</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">FC Repouso</span>
+              <span class="info-value"><span id="fc_repouso"></span> bpm</span>
+            </div>
+          </div>
+
+          <!-- Informações do Treino -->
+          <div class="card-info">
+            <h2>Informações do Treino</h2>
+            <div id="treino-info" class="treino-info">
+              <!-- Será preenchido via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Botão Atualizar -->
+          <a href="../pages/periodizacao.html" class="atualizar-btn">
+            <i class="ri-edit-2-line"></i>
+            Atualizar Dados / Treino
+          </a>
+        </div>
+
+        <div class="toolbar toolbar-bottom tabbar">
+          <div class="toolbar-inner">
+            <a href="../pages/home.html" class="tab-link">
+              <i class="ri-home-4-line"></i>
+              <span>Início</span>
+            </a>
+            <a href="../pages/treinos.html" class="tab-link">
+              <i class="ri-heart-pulse-line"></i>
+              <span>Treinos</span>
+            </a>
+            <a href="../pages/dieta.html" class="tab-link">
+              <i class="ri-restaurant-line"></i>
+              <span>Dieta</span>
+            </a>
+            <a href="../pages/perfil.html" class="tab-link tab-link-active">
+              <i class="ri-user-line"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  
+  <script>
+    function gerarTreinoInfo(dados) {
+      const objetivo = dados.objetivo;
+      let html = '';
+
+      if (objetivo === "emagrecimento") {
+        html = `
+          <p><strong>Duração:</strong> 40-60 minutos</p>
+          <p><strong>Intensidade:</strong> Alta (70-85% FC Máx)</p>
+          <p><strong>Foco:</strong> HIIT, Cardio e Exercícios Funcionais</p>
+          <p><strong>Frequência:</strong> 5x por semana</p>
+          <p><strong>Zona Alvo:</strong> ${Math.round(dados.fcMaxima * 0.7)}-${Math.round(dados.fcMaxima * 0.85)} bpm</p>
+        `;
+      } else if (objetivo === "hipertrofia") {
+        html = `
+          <p><strong>Duração:</strong> 60-75 minutos</p>
+          <p><strong>Intensidade:</strong> Moderada-Alta</p>
+          <p><strong>Foco:</strong> Musculação com Cargas Progressivas</p>
+          <p><strong>Divisão:</strong> Treino Dividido por Grupos Musculares</p>
+          <p><strong>Descanso:</strong> 60-90 segundos entre séries</p>
+        `;
+      } else if (objetivo === "resistencia") {
+        html = `
+          <p><strong>Duração:</strong> 45-60 minutos</p>
+          <p><strong>Intensidade:</strong> Moderada (60-75% FC Máx)</p>
+          <p><strong>Foco:</strong> Exercícios Aeróbicos e Circuitos</p>
+          <p><strong>Frequência:</strong> 4x por semana</p>
+          <p><strong>Zona Alvo:</strong> ${Math.round(dados.fcMaxima * 0.6)}-${Math.round(dados.fcMaxima * 0.75)} bpm</p>
+        `;
+      }
+
+      return html;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Carregar dados do usuário
+      const dadosSalvos = localStorage.getItem('dadosPeriodizacao');
+      if (dadosSalvos) {
+        const dados = JSON.parse(dadosSalvos);
+        
+        // Preencher dados do usuário
+        document.getElementById('nome').textContent = dados.nome || 'Não informado';
+        document.getElementById('idade').textContent = dados.idade || 'Não informado';
+        document.getElementById('peso').textContent = dados.peso || 'Não informado';
+        document.getElementById('nivel').textContent = dados.nivel || 'Não informado';
+        document.getElementById('objetivo').textContent = dados.objetivo || 'Não informado';
+        document.getElementById('frequencia').textContent = dados.frequencia || 'Não informado';
+        document.getElementById('fc_maxima').textContent = dados.fcMaxima || 'Não informado';
+        document.getElementById('fc_repouso').textContent = dados.fc_repouso || 'Não informado';
+
+        // Gerar informações do treino
+        document.getElementById('treino-info').innerHTML = gerarTreinoInfo(dados);
+      }
+
+      // Eventos de navegação
+      document.querySelectorAll('.toolbar-inner a, .link.back').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.location.href = this.getAttribute('href');
+        });
+      });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0e1624">
+  <title>Periodização - Eu Personal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css">
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="https://cdn.remixicon.com/releases/2.5.0/remixicon.css">
+  <style>
+    body, .page {
+      background-color: #0e1624;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .page-content {
+      padding-bottom: 80px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .form-container {
+      background-color: #1e2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .item-title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    input, select {
+      background: #2d3e50;
+      color: #ffffff !important;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 4px;
+    }
+
+    .item-input-wrap input,
+    .item-input-wrap select {
+      color: #ffffff !important;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    select option {
+      background: #2d3e50;
+      color: #ffffff;
+    }
+
+    .item-input {
+      --f7-input-text-color: #ffffff;
+      --f7-label-text-color: #ffffff;
+      --f7-input-placeholder-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .item-content {
+      --f7-list-item-text-color: #ffffff;
+    }
+
+    select:invalid {
+      color: #9faab7;
+    }
+
+    .button-fill {
+      background: #007aff;
+      border-radius: 12px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .button-fill:hover {
+      background: #005fcc;
+    }
+
+    .logo-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .logo-container img {
+      width: 150px;
+    }
+
+    .fc-info {
+      color: #9faab7;
+      font-size: 0.85em;
+      margin-top: 4px;
+      padding-left: 4px;
+    }
+
+    /* Toast visual personalizado */
+    .toast-sucesso-personalizado {
+      background: linear-gradient(135deg, #2196f3 60%, #00d4ff 100%);
+      color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(33,150,243,0.18);
+      font-size: 1em;
+      text-align: center;
+      padding: 18px 24px;
+      font-family: 'Arial', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="page" data-name="periodizacao">
+    <div class="page-content">
+      <div class="logo-container" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
+        <a href="../pages/home.html" class="back-btn" style="color: #2196f3; font-size: 2em; text-decoration: none;">
+          <i class="ri-arrow-left-line"></i>
+        </a>
+        <img src="../img/logo.png" alt="Eu Personal" />
+      </div>
+
+      <form id="formCadastro" class="list form-container" onsubmit="gerarTreino(event); return false;">
+        <!-- Nome -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Nome do Aluno</div>
+            <div class="item-input-wrap">
+              <input type="text" name="nome" placeholder="Digite seu nome completo" required />
+            </div>
+          </div>
+        </li>
+
+        <!-- Idade -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Idade</div>
+            <div class="item-input-wrap">
+              <input type="number" name="idade" placeholder="Digite sua idade em anos" required />
+            </div>
+          </div>
+        </li>
+
+        <!-- Peso -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Peso</div>
+            <div class="item-input-wrap">
+              <input type="number" name="peso" placeholder="Digite seu peso em quilogramas" required />
+            </div>
+          </div>
+        </li>
+
+        <!-- Nível -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Nível</div>
+            <div class="item-input-wrap">
+              <select name="nivel" required>
+                <option value="" disabled selected>Selecione seu nível de experiência</option>
+                <option value="iniciante">Iniciante</option>
+                <option value="intermediario">Intermediário</option>
+                <option value="avancado">Avançado</option>
+              </select>
+            </div>
+          </div>
+        </li>
+
+        <!-- Objetivo -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Objetivo</div>
+            <div class="item-input-wrap">
+              <select name="objetivo" required>
+                <option value="" disabled selected>Selecione seu objetivo principal</option>
+                <option value="emagrecimento">Emagrecimento</option>
+                <option value="hipertrofia">Hipertrofia</option>
+                <option value="resistencia">Resistência</option>
+              </select>
+            </div>
+          </div>
+        </li>
+
+        <!-- Modalidade -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Modalidade</div>
+            <div class="item-input-wrap">
+              <select name="modalidade" required>
+                <option value="" disabled selected>Selecione a modalidade de treino</option>
+                <option value="funcional">Funcional</option>
+                <option value="musculacao">Musculação</option>
+                <option value="caminhada">Caminhada</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+          </div>
+        </li>
+
+        <!-- Frequência -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Frequência</div>
+            <div class="item-input-wrap">
+              <select name="frequencia" required>
+                <option value="" disabled selected>Selecione quantas vezes por semana</option>
+                <option value="1-2">1 a 2 vezes</option>
+                <option value="3-4">3 a 4 vezes</option>
+                <option value="5+">5 ou mais vezes</option>
+              </select>
+            </div>
+          </div>
+        </li>
+
+        <!-- Gênero -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Gênero</div>
+            <div class="item-input-wrap">
+              <select name="genero" required>
+                <option value="" disabled selected>Selecione seu gênero</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outro">Outro</option>
+                <option value="prefiro_nao_dizer">Prefiro não dizer</option>
+              </select>
+            </div>
+          </div>
+        </li>
+
+        <!-- FC Repouso -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">FC de Repouso</div>
+            <div class="item-input-wrap">
+              <input type="number" name="fc_repouso" id="fc_repouso" placeholder="Ex: 60 a 75 (ou deixe em branco para automático)" />
+              <div class="fc-info">Será calculado automaticamente com base no seu nível se não preenchido</div>
+            </div>
+          </div>
+        </li>
+      <div class="block button-container">
+          <button type="submit" class="button button-fill">
+          <i class="ri-barbell-line" style="margin-right: 8px;"></i> Gerar Treino
+        </button>
+      </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script src="../js/exercicios.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  <script type="module" src="../js/treinos.js"></script>
+  <script>
+    document.querySelector('select[name="nivel"]').addEventListener('change', function() {
+      const fcRepousoInput = document.getElementById('fc_repouso');
+      let fcEstimada = 70;
+      
+      switch(this.value) {
+        case 'iniciante': fcEstimada = 70; break;
+        case 'intermediario': fcEstimada = 65; break;
+        case 'avancado': fcEstimada = 60; break;
+      }
+      
+      fcRepousoInput.value = fcEstimada;
+    });
+
+    window.gerarTreino = function(e) {
+      if (e) e.preventDefault();
+      const form = document.getElementById('formCadastro');
+      const dados = {
+        nome: form.nome.value,
+        idade: parseInt(form.idade.value),
+        peso: parseFloat(form.peso.value),
+        nivel: form.nivel.value,
+        objetivo: form.objetivo.value,
+        modalidade: form.modalidade.value,
+        frequencia: form.frequencia.value,
+        genero: form.genero.value,
+        fc_repouso: parseInt(form.fc_repouso.value),
+        fcMaxima: 220 - parseInt(form.idade.value)
+      };
+
+      // Garantir FC de Repouso
+      if (!dados.fc_repouso) {
+        switch(dados.nivel) {
+          case 'iniciante': dados.fc_repouso = 70; break;
+          case 'intermediario': dados.fc_repouso = 65; break;
+          case 'avancado': dados.fc_repouso = 60; break;
+          default: dados.fc_repouso = 70;
+        }
+      }
+
+      // Salvar no localStorage
+      localStorage.removeItem('treinoGerado');
+      localStorage.setItem('dadosPeriodizacao', JSON.stringify(dados));
+      localStorage.setItem('treinoAtualizadoEm', new Date().toISOString());
+
+      // Gerar treino personalizado com os dados atualizados
+      if (window.EuPersonal && typeof window.EuPersonal.gerarTreinoPersonalizado === 'function') {
+        window.EuPersonal.gerarTreinoPersonalizado();
+        localStorage.setItem('showTreinoToast', '1');
+        // Toast visual moderno
+        if (window.app && window.app.toast) {
+          window.app.toast.create({
+            text: '<span style="font-size:1.1em;font-weight:600;">✔ Dados salvos!</span><br>Seu treino foi gerado com sucesso.',
+            position: 'center',
+            closeTimeout: 2000,
+            cssClass: 'toast-sucesso-personalizado'
+          }).open();
+        }
+        // Redirecionamento SPA ou fallback
+        if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
+          window.EuPersonal.app.views.main.router.navigate('/treinos/');
+        } else {
+          window.location.href = '../pages/treinos.html';
+        }
+        return;
+      }
+      // Redirecionar (fallback)
+      if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
+        window.EuPersonal.app.views.main.router.navigate('/treinos/');
+      } else {
+        window.location.href = '../pages/treinos.html';
+      }
+    }
+
+    // Carregar dados salvos
+    document.addEventListener('DOMContentLoaded', function () {
+      const dadosSalvos = localStorage.getItem('dadosPeriodizacao');
+      if (dadosSalvos) {
+        const dados = JSON.parse(dadosSalvos);
+        const form = document.getElementById('formCadastro');
+        
+        // Preencher cada campo do formulário
+        if (dados.nome) form.nome.value = dados.nome;
+        if (dados.idade) form.idade.value = dados.idade;
+        if (dados.peso) form.peso.value = dados.peso;
+        if (dados.nivel) form.nivel.value = dados.nivel;
+        if (dados.objetivo) form.objetivo.value = dados.objetivo;
+        if (dados.modalidade) form.modalidade.value = dados.modalidade;
+        if (dados.frequencia) form.frequencia.value = dados.frequencia;
+        if (dados.genero) form.genero.value = dados.genero;
+        if (dados.fc_repouso) form.fc_repouso.value = dados.fc_repouso;
+      }
+    });
+  </script>
+</body>
+</html>

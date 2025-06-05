@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Eu Personal - Dieta</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css">
+  <style>
+    body {
+      background-color: #0e1624;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .form-container {
+      padding: 16px;
+    }
+
+    .block-title {
+      color: #4da6ff;
+    }
+
+    .card {
+      background-color: #2a3b63;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #ffffff;
+    }
+
+    .result {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="view view-main view-init">
+      <div class="page">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="title">Cadastro e Dieta</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="form-container">
+            <form id="form-dados-usuario">
+              <div class="list no-hairlines-md">
+                <ul>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Nome</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="nome" required />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Idade</div>
+                        <div class="item-input-wrap">
+                          <input type="number" name="idade" required />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Altura (cm)</div>
+                        <div class="item-input-wrap">
+                          <input type="number" name="altura" required />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Peso (kg)</div>
+                        <div class="item-input-wrap">
+                          <input type="number" name="peso" step="0.1" required />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Objetivo</div>
+                        <div class="item-input-wrap">
+                          <select name="objetivo" required>
+                            <option value="emagrecer">Emagrecer</option>
+                            <option value="manter">Manter Peso</option>
+                            <option value="ganhar">Ganhar Massa</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="block">
+                <button class="button button-fill color-blue" type="submit">Gerar Dieta</button>
+              </div>
+            </form>
+
+            <div id="resultado-dieta" class="card" style="display:none;">
+              <h3>Dieta Gerada</h3>
+              <div id="info-dieta" class="result"></div>
+              <div style="margin-top: 16px;">
+                <button class="button button-outline color-orange" onclick="abrirEditorRefeicoes()">✏️ Editar Refeições</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP para editar refeições -->
+  <div class="popup popup-editar" id="popup-receitas">
+    <div class="view">
+      <div class="page">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="title">Editar Refeições</div>
+            <div class="right">
+              <a href="#" class="link popup-close">Fechar</a>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="block">
+            <form id="form-refeicoes">
+              <div class="list no-hairlines-md">
+                <ul>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Café da Manhã</div>
+                        <div class="item-input-wrap">
+                          <textarea name="cafe" placeholder="Ex: Ovos, frutas, batata..."></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Almoço</div>
+                        <div class="item-input-wrap">
+                          <textarea name="almoco" placeholder="Ex: Arroz, frango, salada..."></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Jantar</div>
+                        <div class="item-input-wrap">
+                          <textarea name="jantar" placeholder="Ex: Omelete, legumes..."></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="block">
+                <button class="button button-fill color-green" type="submit">Salvar Refeições</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script>
+    const app = new Framework7();
+
+    function calcularDieta(peso, altura, idade, objetivo) {
+      let tmb = 10 * peso + 6.25 * altura - 5 * idade + 5;
+      let metaKcal;
+      if (objetivo === 'emagrecer') metaKcal = tmb - 500;
+      else if (objetivo === 'ganhar') metaKcal = tmb + 500;
+      else metaKcal = tmb;
+
+      let proteina = (metaKcal * 0.3) / 4;
+      let carbo = (metaKcal * 0.5) / 4;
+      let gordura = (metaKcal * 0.2) / 9;
+
+      return {
+        metaKcal: Math.round(metaKcal),
+        proteina: Math.round(proteina),
+        carbo: Math.round(carbo),
+        gordura: Math.round(gordura),
+        objetivo: objetivo
+      };
+    }
+
+    function gerarRefeicoes(objetivo) {
+      const dietas = {
+        emagrecer: {
+          cafe: '2 ovos cozidos, 1 banana, 1 fatia de pão integral com pasta de amendoim',
+          almoco: '100g de arroz integral, 150g de frango grelhado, salada verde, azeite',
+          jantar: 'Omelete com legumes, chá sem açúcar'
+        },
+        manter: {
+          cafe: 'Leite com café, 3 fatias de pão integral com queijo branco',
+          almoco: '120g de arroz, 150g de carne magra, feijão e legumes',
+          jantar: 'Macarrão integral com frango desfiado e fruta'
+        },
+        ganhar: {
+          cafe: '4 ovos mexidos, 2 fatias de pão integral, 1 banana com aveia',
+          almoco: '150g de arroz, 200g de carne, feijão, batata doce, salada',
+          jantar: '150g de arroz integral, frango grelhado, legumes cozidos'
+        }
+      };
+      return dietas[objetivo];
+    }
+
+    function salvarDadosUsuario(formData) {
+      const nome = formData.get('nome');
+      const idade = parseInt(formData.get('idade'));
+      const altura = parseFloat(formData.get('altura'));
+      const peso = parseFloat(formData.get('peso'));
+      const objetivo = formData.get('objetivo');
+
+      let metaKcal = 0;
+      if (objetivo === 'emagrecer') metaKcal = peso * 20;
+      else if (objetivo === 'manter') metaKcal = peso * 25;
+      else if (objetivo === 'ganhar') metaKcal = peso * 30;
+
+      const proteina = peso * 2; // g
+      const carbo = (metaKcal * 0.5) / 4; // g
+      const gordura = (metaKcal * 0.2) / 9; // g
+
+      const dieta = {
+        metaKcal: Math.round(metaKcal),
+        proteina: Math.round(proteina),
+        carbo: Math.round(carbo),
+        gordura: Math.round(gordura)
+      };
+
+      const refeicoesPadrao = gerarRefeicoes(objetivo); // <-- esta linha é a chave
+      localStorage.setItem('refeicoes', JSON.stringify(refeicoesPadrao)); // <-- salva
+
+      localStorage.setItem('usuario', JSON.stringify({ nome, idade, altura, peso, objetivo }));
+      localStorage.setItem('dieta', JSON.stringify(dieta));
+
+      mostrarResultado(dieta);
+    }
+
+    function mostrarResultado(dieta) {
+      const refeicoes = JSON.parse(localStorage.getItem('refeicoes')) || {};
+      const resultado = `
+        <div>Meta Diária: <strong>${dieta.metaKcal} kcal</strong></div>
+        <div>Proteínas: <strong>${dieta.proteina} g</strong></div>
+        <div>Carboidratos: <strong>${dieta.carbo} g</strong></div>
+        <div>Gorduras: <strong>${dieta.gordura} g</strong></div>
+        <hr>
+        <div><strong>Café da Manhã:</strong> ${refeicoes.cafe || 'Não definido'}</div>
+        <div><strong>Almoço:</strong> ${refeicoes.almoco || 'Não definido'}</div>
+        <div><strong>Jantar:</strong> ${refeicoes.jantar || 'Não definido'}</div>
+      `;
+      document.getElementById('info-dieta').innerHTML = resultado;
+      document.getElementById('form-dados-usuario').style.display = 'none'; // Oculta formulário
+      document.getElementById('resultado-dieta').style.display = 'block';   // Mostra dieta
+    }
+
+    function abrirEditorRefeicoes() {
+      const refeicoesSalvas = JSON.parse(localStorage.getItem('refeicoes')) || {};
+      document.querySelector('[name="cafe"]').value = refeicoesSalvas.cafe || '';
+      document.querySelector('[name="almoco"]').value = refeicoesSalvas.almoco || '';
+      document.querySelector('[name="jantar"]').value = refeicoesSalvas.jantar || '';
+      app.popup.open('#popup-receitas');
+    }
+
+    function salvarRefeicoes(data) {
+      const refeicoes = {
+        cafe: data.get('cafe'),
+        almoco: data.get('almoco'),
+        jantar: data.get('jantar')
+      };
+      localStorage.setItem('refeicoes', JSON.stringify(refeicoes));
+      mostrarResultado(JSON.parse(localStorage.getItem('dieta')));
+    }
+    function voltarFormulario() {
+     document.getElementById('form-dados-usuario').style.display = 'block';
+     document.getElementById('resultado-dieta').style.display = 'none';
+    }
+
+    document.getElementById('form-dados-usuario').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      salvarDadosUsuario(formData);
+    });
+
+    document.getElementById('form-refeicoes').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      salvarRefeicoes(formData);
+      app.popup.close('#popup-receitas');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const dietaSalva = localStorage.getItem('dieta');
+      if (dietaSalva) mostrarResultado(JSON.parse(dietaSalva));
+
+      const dados = JSON.parse(localStorage.getItem('usuario'));
+      if (dados) {
+        document.querySelector('[name="nome"]').value = dados.nome || '';
+        document.querySelector('[name="idade"]').value = dados.idade || '';
+        document.querySelector('[name="altura"]').value = dados.altura || '';
+        document.querySelector('[name="peso"]').value = dados.peso || '';
+        document.querySelector('[name="objetivo"]').value = dados.objetivo || '';
+      }
+    });
+  </script>
+</body>
+
+</html>
