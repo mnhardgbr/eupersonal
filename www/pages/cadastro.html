@@ -183,6 +183,9 @@
         <input type="password" id="password" placeholder="Senha" required />
         <i class="ri-lock-2-line"></i>
       </div>
+      <button type="button" id="google-login" class="login-btn" style="background: #fff; color: #101828; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width: 22px; height: 22px;"/> Entrar com Google
+      </button>
       <button type="submit" class="login-btn">Cadastrar</button>
     </form>
     <div id="signup-message" class="login-message"></div>
@@ -218,6 +221,23 @@
         msg.style.color = 'green';
       }
     };
+
+    document.getElementById('google-login').onclick = async () => {
+      const { user, session, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: 'https://eupersonal.vercel.app/pages/home.html'
+        }
+      });
+      if (error) {
+        alert('Erro ao entrar com Google: ' + error.message);
+      }
+    };
+
+    const user = supabase.auth.user();
+    if (user) {
+      window.location.href = '/pages/home.html';
+    }
   </script>
 </body>
 </html> 
