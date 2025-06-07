@@ -253,7 +253,85 @@
   <script src="../js/exercicios.js"></script>
   <script type="module" src="../js/app.js"></script>
   <script type="module" src="../js/treinos.js"></script>
-  <script>
+  <script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const supabase = createClient(
+  'https://bntdzvjyemwvpzttptwu.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudGR6dmp5ZW13dnB6dHRwdHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMjc3MTEsImV4cCI6MjA2NDcwMzcxMX0.TR-UU4J7AxWOHGLvBf16oQSU_TIkzQ8P536av0-Za0g'
+);
+
+window.gerarTreino = async function(e) {
+  if (e) e.preventDefault();
+  const form = document.getElementById('formCadastro');
+  const dados = {
+    nome: form.nome.value,
+    idade: parseInt(form.idade.value),
+    peso: parseFloat(form.peso.value),
+    nivel: form.nivel.value,
+    objetivo: form.objetivo.value,
+    modalidade: form.modalidade.value,
+    frequencia: form.frequencia.value,
+    genero: form.genero.value,
+    fc_repouso: parseInt(form.fc_repouso.value),
+    fcMaxima: 220 - parseInt(form.idade.value)
+  };
+
+  // Garantir FC de Repouso
+  if (!dados.fc_repouso) {
+    switch(dados.nivel) {
+      case 'iniciante': dados.fc_repouso = 70; break;
+      case 'intermediario': dados.fc_repouso = 65; break;
+      case 'avancado': dados.fc_repouso = 60; break;
+      default: dados.fc_repouso = 70;
+    }
+  }
+
+  // Gerar treino personalizado com os dados atualizados
+  let treinoCompleto = null;
+  if (window.EuPersonal && typeof window.EuPersonal.gerarTreinoPersonalizado === 'function') {
+    treinoCompleto = window.EuPersonal.gerarTreinoPersonalizado(dados);
+  }
+
+  if (!treinoCompleto) {
+    alert('Erro ao gerar treino.');
+    return;
+  }
+
+  // Salvar no Supabase
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert('Faça login para salvar o treino!');
+    return;
+  }
+  const { error } = await supabase.from('treinos').insert([
+    {
+      user_id: user.id,
+      dados: treinoCompleto
+    }
+  ]);
+  if (error) {
+    alert('Erro ao salvar treino: ' + error.message);
+    return;
+  }
+
+  // Toast visual moderno
+  if (window.app && window.app.toast) {
+    window.app.toast.create({
+      text: '<span style="font-size:1.1em;font-weight:600;">✔ Treino salvo!</span><br>Seu treino foi gerado com sucesso.',
+      position: 'center',
+      closeTimeout: 2000,
+      cssClass: 'toast-sucesso-personalizado'
+    }).open();
+  }
+
+  // Redirecionar para treinos
+  if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
+    window.EuPersonal.app.views.main.router.navigate('/treinos/');
+  } else {
+    window.location.href = '../pages/treinos.html';
+  }
+}
+
     document.querySelector('select[name="nivel"]').addEventListener('change', function() {
       const fcRepousoInput = document.getElementById('fc_repouso');
       let fcEstimada = 70;
@@ -266,66 +344,6 @@
       
       fcRepousoInput.value = fcEstimada;
     });
-
-    window.gerarTreino = function(e) {
-      if (e) e.preventDefault();
-      const form = document.getElementById('formCadastro');
-      const dados = {
-        nome: form.nome.value,
-        idade: parseInt(form.idade.value),
-        peso: parseFloat(form.peso.value),
-        nivel: form.nivel.value,
-        objetivo: form.objetivo.value,
-        modalidade: form.modalidade.value,
-        frequencia: form.frequencia.value,
-        genero: form.genero.value,
-        fc_repouso: parseInt(form.fc_repouso.value),
-        fcMaxima: 220 - parseInt(form.idade.value)
-      };
-
-      // Garantir FC de Repouso
-      if (!dados.fc_repouso) {
-        switch(dados.nivel) {
-          case 'iniciante': dados.fc_repouso = 70; break;
-          case 'intermediario': dados.fc_repouso = 65; break;
-          case 'avancado': dados.fc_repouso = 60; break;
-          default: dados.fc_repouso = 70;
-        }
-      }
-
-      // Salvar no localStorage
-      localStorage.removeItem('treinoGerado');
-      localStorage.setItem('dadosPeriodizacao', JSON.stringify(dados));
-      localStorage.setItem('treinoAtualizadoEm', new Date().toISOString());
-
-      // Gerar treino personalizado com os dados atualizados
-      if (window.EuPersonal && typeof window.EuPersonal.gerarTreinoPersonalizado === 'function') {
-        window.EuPersonal.gerarTreinoPersonalizado();
-        localStorage.setItem('showTreinoToast', '1');
-        // Toast visual moderno
-        if (window.app && window.app.toast) {
-          window.app.toast.create({
-            text: '<span style="font-size:1.1em;font-weight:600;">✔ Dados salvos!</span><br>Seu treino foi gerado com sucesso.',
-            position: 'center',
-            closeTimeout: 2000,
-            cssClass: 'toast-sucesso-personalizado'
-          }).open();
-        }
-        // Redirecionamento SPA ou fallback
-        if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
-          window.EuPersonal.app.views.main.router.navigate('/treinos/');
-        } else {
-          window.location.href = '../pages/treinos.html';
-        }
-        return;
-      }
-      // Redirecionar (fallback)
-      if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
-        window.EuPersonal.app.views.main.router.navigate('/treinos/');
-      } else {
-        window.location.href = '../pages/treinos.html';
-      }
-    }
 
     // Carregar dados salvos
     document.addEventListener('DOMContentLoaded', function () {
