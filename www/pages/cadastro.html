@@ -238,6 +238,56 @@
     if (user) {
       window.location.href = '/pages/home.html';
     }
+
+    // Função para montar o objeto do usuário
+    function montarDadosUsuario() {
+      return {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        idade: parseInt(document.getElementById('idade').value),
+        peso: parseFloat(document.getElementById('peso').value),
+        altura: parseFloat(document.getElementById('altura').value),
+        sexo: document.getElementById('sexo').value,
+        objetivo: document.getElementById('objetivo').value,
+        nivel: document.getElementById('nivel').value,
+        frequencia: document.getElementById('frequencia').value,
+        equipamento: document.getElementById('equipamento').value === 'sim',
+        limitacao: document.getElementById('limitacao').value || ''
+      };
+    }
+
+    async function salvarDadosNoSupabase() {
+      const dadosUsuario = montarDadosUsuario();
+
+      // Verificar se o usuário está logado
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        alert('Faça login para salvar os dados!');
+        return;
+      }
+
+      try {
+        // Salvar dados no Supabase
+        const { error } = await supabase.from('dados_periodizacao').upsert({
+          user_id: user.id,
+          dados: dadosUsuario,
+          criado_em: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+
+        if (error) throw error;
+
+        alert('Dados salvos com sucesso!');
+        window.location.href = 'perfil.html';
+
+      } catch (error) {
+        console.error('Erro ao salvar dados:', error);
+        alert('Erro ao salvar dados: ' + error.message);
+      }
+    }
+
+    // Chame salvarDadosNoSupabase() quando o usuário clicar em "Salvar Dados"
+    document.getElementById('btnSalvarDados').onclick = salvarDadosNoSupabase;
   </script>
 </body>
 </html> 

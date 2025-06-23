@@ -188,12 +188,9 @@
           <div class="item-inner">
             <div class="item-title item-label">Modalidade</div>
             <div class="item-input-wrap">
-              <select name="modalidade" required>
-                <option value="" disabled selected>Selecione a modalidade de treino</option>
-                <option value="funcional">Funcional</option>
+              <select name="modalidade" id="modalidade" required>
+                <option value="" disabled selected>Selecione a modalidade</option>
                 <option value="musculacao">Musculação</option>
-                <option value="caminhada">Caminhada</option>
-                <option value="outro">Outro</option>
               </select>
             </div>
           </div>
@@ -240,9 +237,43 @@
             </div>
           </div>
         </li>
+
+        <!-- Altura -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Altura (cm)</div>
+            <div class="item-input-wrap">
+              <input type="number" name="altura" placeholder="Digite sua altura em centímetros" required />
+            </div>
+          </div>
+        </li>
+        
+        <!-- Possui equipamento -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Possui equipamento?</div>
+            <div class="item-input-wrap">
+              <select name="equipamento" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+            </div>
+          </div>
+        </li>
+        
+        <!-- Limitação física ou lesão -->
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Limitação física ou lesão?</div>
+            <div class="item-input-wrap">
+              <input type="text" name="limitacao" placeholder="Descreva se houver (opcional)" />
+            </div>
+          </div>
+        </li>
       <div class="block button-container">
-          <button type="submit" class="button button-fill">
-          <i class="ri-barbell-line" style="margin-right: 8px;"></i> Gerar Treino
+          <button type="submit" class="button button-fill button-large color-cyan">
+          <i class="ri-barbell-line" style="margin-right: 8px;"></i> Salvar Dados
         </button>
       </div>
       </form>
@@ -250,9 +281,9 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script src="../js/exercicios-db.js"></script>
   <script src="../js/exercicios.js"></script>
   <script type="module" src="../js/app.js"></script>
-  <script type="module" src="../js/treinos.js"></script>
   <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 const supabase = createClient(
@@ -261,76 +292,70 @@ const supabase = createClient(
 );
 
 window.gerarTreino = async function(e) {
-  if (e) e.preventDefault();
-  const form = document.getElementById('formCadastro');
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
   const dados = {
-    nome: form.nome.value,
-    idade: parseInt(form.idade.value),
-    peso: parseFloat(form.peso.value),
-    nivel: form.nivel.value,
-    objetivo: form.objetivo.value,
-    modalidade: form.modalidade.value,
-    frequencia: form.frequencia.value,
-    genero: form.genero.value,
-    fc_repouso: parseInt(form.fc_repouso.value),
-    fcMaxima: 220 - parseInt(form.idade.value)
+    nome: formData.get('nome'),
+    idade: parseInt(formData.get('idade')),
+    peso: parseFloat(formData.get('peso')),
+    altura: parseFloat(formData.get('altura')),
+    sexo: formData.get('genero'),
+    objetivo: formData.get('objetivo'),
+    nivel: formData.get('nivel'),
+    frequencia: formData.get('frequencia'),
+    modalidade: formData.get('modalidade'),
+    equipamento: formData.get('equipamento') === 'sim',
+    limitacao: formData.get('limitacao') || ''
   };
 
-  // Garantir FC de Repouso
-  if (!dados.fc_repouso) {
-    switch(dados.nivel) {
-      case 'iniciante': dados.fc_repouso = 70; break;
-      case 'intermediario': dados.fc_repouso = 65; break;
-      case 'avancado': dados.fc_repouso = 60; break;
-      default: dados.fc_repouso = 70;
-    }
-  }
+  // Calcular FC Máxima (fórmula de Tanaka)
+  const fcMaxima = Math.round(208 - (0.7 * dados.idade));
+  const fcRepouso = Math.round(fcMaxima * 0.6); // Estimativa
 
-  // Gerar treino personalizado com os dados atualizados
-  let treinoCompleto = null;
-  if (window.EuPersonal && typeof window.EuPersonal.gerarTreinoPersonalizado === 'function') {
-    treinoCompleto = window.EuPersonal.gerarTreinoPersonalizado(dados);
-  }
+  // Adicionar FC ao objeto dados
+  dados.fcMaxima = fcMaxima;
+  dados.fc_repouso = fcRepouso;
 
-  if (!treinoCompleto) {
-    alert('Erro ao gerar treino.');
-    return;
-  }
+  // Salvar dados no localStorage
+  localStorage.setItem('dadosPeriodizacao', JSON.stringify(dados));
 
-  // Salvar no Supabase
+  // Verificar se o usuário está logado
   const { data: { user } } = await supabase.auth.getUser();
+  
   if (!user) {
-    alert('Faça login para salvar o treino!');
+    alert('Faça login para salvar os dados!');
     return;
   }
-  const { error } = await supabase.from('treinos').insert([
-    {
+
+  try {
+    // Salvar dados no Supabase
+    const { error } = await supabase.from('dados_periodizacao').upsert({
       user_id: user.id,
-      dados: treinoCompleto
-    }
-  ]);
-  if (error) {
-    alert('Erro ao salvar treino: ' + error.message);
-    return;
-  }
+      dados: dados,
+      criado_em: new Date().toISOString()
+    }, { onConflict: 'user_id' });
 
-  // Toast visual moderno
-  if (window.app && window.app.toast) {
-    window.app.toast.create({
-      text: '<span style="font-size:1.1em;font-weight:600;">✔ Treino salvo!</span><br>Seu treino foi gerado com sucesso.',
+    if (error) throw error;
+
+    // Mostrar mensagem de sucesso
+    app.toast.create({
+      text: '<span style="font-size:1.1em;font-weight:600;">✔ Dados salvos!</span><br>Suas informações foram salvas com sucesso.',
+      closeTimeout: 3000,
       position: 'center',
-      closeTimeout: 2000,
-      cssClass: 'toast-sucesso-personalizado'
+      cssClass: 'toast-success'
     }).open();
-  }
 
-  // Redirecionar para treinos
-  if (window.EuPersonal && window.EuPersonal.app && window.EuPersonal.app.views && window.EuPersonal.app.views.main) {
-    window.EuPersonal.app.views.main.router.navigate('/treinos/');
-  } else {
-    window.location.href = '../pages/treinos.html';
+    // Redirecionar para perfil
+    setTimeout(() => {
+      window.location.href = '../pages/perfil.html';
+    }, 2000);
+
+  } catch (error) {
+    console.error('Erro ao salvar dados:', error);
+    alert('Erro ao salvar dados: ' + error.message);
   }
-}
+};
 
     document.querySelector('select[name="nivel"]').addEventListener('change', function() {
       const fcRepousoInput = document.getElementById('fc_repouso');
@@ -362,6 +387,9 @@ window.gerarTreino = async function(e) {
         if (dados.frequencia) form.frequencia.value = dados.frequencia;
         if (dados.genero) form.genero.value = dados.genero;
         if (dados.fc_repouso) form.fc_repouso.value = dados.fc_repouso;
+        if (dados.altura) form.altura.value = dados.altura;
+        if (dados.equipamento) form.equipamento.value = dados.equipamento;
+        if (dados.limitacao) form.limitacao.value = dados.limitacao;
       }
     });
   </script>

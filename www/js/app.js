@@ -3,7 +3,6 @@ window.EuPersonal = window.EuPersonal || {};
 
 // Usar banco global carregado por exercicios.js
 const exerciciosDB = window.exerciciosDB;
-import { atualizarTreinos, abrirVideoPopup } from './treinos.js';
 
 // Initialize Framework7
 var app = new Framework7({
@@ -31,16 +30,16 @@ var app = new Framework7({
       url: './pages/home.html',
     },
     {
-      path: '/treinos/',
-      url: './pages/treinos.html',
-    },
-    {
       path: '/dieta/',
       url: './pages/dieta.html',
     },
     {
       path: '/perfil/',
       url: './pages/perfil.html',
+    },
+    {
+      path: '/treinos/',
+      url: './pages/treinos.html',
     },
     {
       path: '/periodizacao/',
@@ -68,9 +67,6 @@ var app = new Framework7({
 
 // Adicionar funções ao namespace global
 window.EuPersonal.app = app;
-window.EuPersonal.atualizarTreinos = atualizarTreinos;
-window.EuPersonal.abrirVideoPopup = abrirVideoPopup;
-window.EuPersonal.gerarTreinoPersonalizado = gerarTreinoPersonalizado;
 
 // Inicializa a view principal
 var mainView = app.views.create('.view-main', {
@@ -94,230 +90,6 @@ window.navegarPara = function(rota) {
   } else {
     console.error('View ou router não disponível');
   }
-}
-
-// Função para selecionar exercícios aleatoriamente de um grupo
-function selecionarExercicios(grupo, quantidade, nivel) {
-  if (!exerciciosDB[grupo] || !Array.isArray(exerciciosDB[grupo])) {
-    return [];
-  }
-
-  // Filtra exercícios baseado no nível
-  let exerciciosFiltrados = exerciciosDB[grupo];
-  
-  // Embaralha o array de exercícios
-  const exerciciosEmbaralhados = [...exerciciosFiltrados].sort(() => Math.random() - 0.5);
-  
-  // Retorna a quantidade solicitada
-  return exerciciosEmbaralhados.slice(0, quantidade);
-}
-
-// Função para ajustar séries e repetições baseado no objetivo e nível
-function ajustarSeriesRepeticoes(exercicio, objetivo, nivel) {
-  const ajustes = {
-    hipertrofia: {
-      iniciante: { series: 3, repeticoes: "10-12" },
-      intermediario: { series: 4, repeticoes: "8-12" },
-      avancado: { series: 4, repeticoes: "6-12" }
-    },
-    emagrecimento: {
-      iniciante: { series: 3, repeticoes: "15-20" },
-      intermediario: { series: 4, repeticoes: "12-15" },
-      avancado: { series: 4, repeticoes: "12-15" }
-    },
-    resistencia: {
-      iniciante: { series: 3, repeticoes: "15-20" },
-      intermediario: { series: 3, repeticoes: "20-25" },
-      avancado: { series: 4, repeticoes: "20-25" }
-    }
-  };
-
-  const ajuste = ajustes[objetivo][nivel];
-  return {
-    ...exercicio,
-    series: ajuste.series,
-    repeticoes: ajuste.repeticoes
-  };
-}
-
-// Função para gerar treino personalizado
-export function gerarTreinoPersonalizado() {
-  // Buscar dados do aluno
-  const dadosSalvos = localStorage.getItem('dadosPeriodizacao');
-  let objetivo = 'hipertrofia';
-  let nivel = 'iniciante';
-  let modalidade = 'musculacao';
-  let frequencia = '3-4';
-
-  if (dadosSalvos) {
-    const dados = JSON.parse(dadosSalvos);
-    objetivo = dados.objetivo || objetivo;
-    nivel = dados.nivel || nivel;
-    modalidade = dados.modalidade || modalidade;
-    frequencia = dados.frequencia || frequencia;
-  }
-
-  // Estrutura base do treino
-  const treino = {
-    A: { nome: '', exercicios: [] }, 
-    B: { nome: '', exercicios: [] }, 
-    C: { nome: '', exercicios: [] } 
-  };
-
-  // Personalização dos nomes dos treinos
-  if (objetivo === 'hipertrofia') {
-    treino.A.nome = 'Treino A - Peito, Ombro e Tríceps';
-    treino.B.nome = 'Treino B - Costas e Bíceps';
-    treino.C.nome = 'Treino C - Pernas e Abdômen';
-  } else if (objetivo === 'emagrecimento') {
-    treino.A.nome = 'Treino A - Cardio e Peito';
-    treino.B.nome = 'Treino B - Costas e HIIT';
-    treino.C.nome = 'Treino C - Pernas e Abdômen';
-  } else if (objetivo === 'resistencia') {
-    treino.A.nome = 'Treino A - Cardio e Resistência';
-    treino.B.nome = 'Treino B - Força Geral';
-    treino.C.nome = 'Treino C - Pernas e Core';
-  }
-
-  // Lógica especial para funcional e caminhada
-  if (modalidade === 'funcional') {
-    // Blocos de exercícios para funcional
-    const aquecimento = [
-      { nome: 'Polichinelos', series: '2x30s', descricao: 'Aquecimento dinâmico' },
-      { nome: 'Corrida Estacionária', series: '2x30s', descricao: 'Aquecimento dinâmico' },
-      { nome: 'Mobilidade Articular', series: '2x10 rep', descricao: 'Mobilidade geral' }
-    ];
-    // Bloco principal mais robusto para emagrecimento
-    const principalA = [
-      { nome: 'Agachamento com Salto', series: '3x12', descricao: 'Exercício composto' },
-      { nome: 'Flexão de Braço', series: '3x10', descricao: 'Exercício composto' },
-      { nome: 'Avanço Alternado', series: '3x12', descricao: 'Exercício composto' },
-      { nome: 'Burpee', series: '3x10', descricao: 'Exercício global' },
-      { nome: 'Mountain Climber', series: '3x20', descricao: 'Cardio/HIIT' },
-      { nome: 'Agachamento Sumô', series: '3x12', descricao: 'Exercício composto' }
-    ];
-    const core = [
-      { nome: 'Prancha', series: '3x30s', descricao: 'Core' },
-      { nome: 'Abdominal Remador', series: '3x15', descricao: 'Core' }
-    ];
-    const alongamento = [
-      { nome: 'Alongamento de Pernas', series: '2x30s', descricao: 'Alongamento' },
-      { nome: 'Alongamento de Braços', series: '2x30s', descricao: 'Alongamento' }
-    ];
-    // Treino A
-    treino.A.exercicios = [
-      { bloco: 'Aquecimento Dinâmico', lista: aquecimento },
-      { bloco: 'Funcional Principal', lista: principalA },
-      { bloco: 'Core', lista: core },
-      { bloco: 'Alongamento e Mobilidade', lista: alongamento }
-    ];
-    // Treino B e C com mais exercícios e variação
-    const principalB = [
-      { nome: 'Agachamento Isométrico', series: '3x30s', descricao: 'Exercício composto' },
-      { nome: 'Flexão Diamante', series: '3x8', descricao: 'Exercício composto' },
-      { nome: 'Afundo', series: '3x12', descricao: 'Exercício composto' },
-      { nome: 'Jumping Jack', series: '3x30s', descricao: 'Cardio/HIIT' },
-      { nome: 'Polichinelos', series: '3x30s', descricao: 'Cardio/HIIT' },
-      { nome: 'Burpee', series: '3x10', descricao: 'Exercício global' }
-    ];
-    treino.B.exercicios = [
-      { bloco: 'Aquecimento Dinâmico', lista: aquecimento },
-      { bloco: 'Funcional Principal', lista: principalB },
-      { bloco: 'Core', lista: core },
-      { bloco: 'Alongamento e Mobilidade', lista: alongamento }
-    ];
-    const principalC = [
-      { nome: 'Agachamento Sumô', series: '3x12', descricao: 'Exercício composto' },
-      { nome: 'Flexão Aberta', series: '3x10', descricao: 'Exercício composto' },
-      { nome: 'Avanço Lateral', series: '3x12', descricao: 'Exercício composto' },
-      { nome: 'Polichinelos', series: '3x30s', descricao: 'Cardio/HIIT' },
-      { nome: 'Mountain Climber', series: '3x20', descricao: 'Cardio/HIIT' },
-      { nome: 'Burpee', series: '3x10', descricao: 'Exercício global' }
-    ];
-    treino.C.exercicios = [
-      { bloco: 'Aquecimento Dinâmico', lista: aquecimento },
-      { bloco: 'Funcional Principal', lista: principalC },
-      { bloco: 'Core', lista: core },
-      { bloco: 'Alongamento e Mobilidade', lista: alongamento }
-    ];
-  } else if (modalidade === 'caminhada') {
-    // Caminhada: só complementares
-    const alongamento = [
-      { nome: 'Alongamento de Pernas', series: '2x30s', descricao: 'Alongamento' },
-      { nome: 'Alongamento de Braços', series: '2x30s', descricao: 'Alongamento' },
-      { nome: 'Mobilidade de Quadril', series: '2x10 rep', descricao: 'Mobilidade' },
-      { nome: 'Fortalecimento Leve', series: '2x15', descricao: 'Exercício leve' }
-    ];
-  treino.A.exercicios = [
-      { bloco: 'Complementares Pós-Caminhada', lista: alongamento }
-  ];
-  treino.B.exercicios = [
-      { bloco: 'Complementares Pós-Caminhada', lista: alongamento }
-  ];
-  treino.C.exercicios = [
-      { bloco: 'Complementares Pós-Caminhada', lista: alongamento }
-    ];
-  } else {
-    // Gera treinos dinamicamente para musculação
-    const exerciciosPorTreino = {
-      A: {
-        grupos: ['peito', 'ombro', 'triceps'],
-        quantidades: [3, 2, 2] // 3 exercícios de peito, 2 de ombro, 2 de tríceps
-      },
-      B: {
-        grupos: ['costas', 'biceps'],
-        quantidades: [3, 2] // 3 exercícios de costas, 2 de bíceps
-      },
-      C: {
-        grupos: ['pernas', 'abdomen'],
-        quantidades: [4, 2] // 4 exercícios de pernas, 2 de abdômen
-      }
-    };
-
-    // Gera exercícios para cada treino
-    for (const [letra, config] of Object.entries(exerciciosPorTreino)) {
-      let exerciciosTreino = [];
-      
-      // Para cada grupo muscular no treino
-      for (let i = 0; i < config.grupos.length; i++) {
-        const grupo = config.grupos[i];
-        const quantidade = config.quantidades[i];
-        
-        // Seleciona exercícios do grupo
-        const exerciciosGrupo = selecionarExercicios(grupo, quantidade, nivel)
-          .map(ex => ajustarSeriesRepeticoes(ex, objetivo, nivel));
-        
-        exerciciosTreino = exerciciosTreino.concat(exerciciosGrupo);
-      }
-
-      // Adiciona cardio se for objetivo de emagrecimento
-      if (objetivo === 'emagrecimento') {
-        exerciciosTreino.unshift({
-          nome: "Esteira",
-          series: nivel === 'iniciante' ? "20 min" : "30 min",
-          repeticoes: "Cardio",
-          videoId: "DfjpR6dzLVg",
-          descricao: "Aquecimento Cardio (Corrida Estacionária)"
-        });
-      }
-
-      treino[letra].exercicios = exerciciosTreino;
-    }
-  }
-
-  // Salvar treino gerado
-  localStorage.setItem('treinoGerado', JSON.stringify(treino));
-  
-  // Redirecionar ou recarregar página de treinos
-  if (typeof mainView !== 'undefined' && mainView.router && mainView.router.currentRoute) {
-  if (mainView.router.currentRoute.path === '/treinos/') {
-    mainView.router.refreshPage();
-  } else {
-    mainView.router.navigate('/treinos/');
-  }
-  } else {
-    window.location.href = '../pages/treinos.html';
-}
 }
 
 function calcularDieta(peso, altura, idade, objetivo) {
@@ -484,9 +256,6 @@ window.mostrarVideoExercicio = function(videoId, nomeExercicio) {
 // Adicionar event listener para mudança de tab
 app.on('tabShow', function (el) {
   console.log('Tab shown:', el.id);
-  if (el.id.startsWith('treino-')) {
-    atualizarTreinos();
-  }
 });
 
 // Funções para manipular refeições na página de dieta
@@ -591,17 +360,58 @@ if (window.location.pathname.includes('dieta.html')) {
   });
 }
 
-let maxExs = 8;
-let intensidade = 'Moderada-Alta';
-if (nivel === 'iniciante') {
-  maxExs = 8;
-  intensidade = 'Leve (foco em técnica e adaptação)';
-}
-if (nivel === 'intermediario') {
-  maxExs = 6;
-  intensidade = 'Moderada';
-}
-if (nivel === 'avancado') {
-  maxExs = 8;
-  intensidade = 'Alta';
-} 
+// Adicionar listener para a inicialização da página de treinos
+app.on('pageInit', function(page) {
+    console.log('[DEBUG] pageInit disparado para a página:', page.name);
+
+    if (page.name === 'treinos') {
+        console.log('[DEBUG] Página de treinos reconhecida. Procurando o botão...');
+        
+        const generateBtn = page.$el.find('#generateBtn');
+        
+        if (generateBtn.length > 0) {
+            console.log('[DEBUG] Botão "Gerar Treino" encontrado. Adicionando listener de clique.');
+        } else {
+            console.error('[DEBUG] ERRO: Botão "Gerar Treino" (#generateBtn) não foi encontrado na página.');
+            return;
+        }
+
+        const emptyState = page.$el.find('#empty-state-container');
+        const workoutView = page.$el.find('#workout-view-container');
+        
+        generateBtn.on('click', function(e) {
+            console.log('[DEBUG] Botão "Gerar Treino" clicado.');
+            e.preventDefault(); // Impede a navegação padrão do link
+
+            // Capturar dados do formulário
+            const objetivoSelect = page.$el.find('#objetivo-select');
+            const nivelSelect = page.$el.find('#nivel-select');
+            const frequenciaSelect = page.$el.find('#frequencia-select');
+
+            const objetivoValue = objetivoSelect.val();
+            const nivelText = nivelSelect.find('option:checked').text();
+            const frequenciaText = frequenciaSelect.find('option:checked').text();
+            
+            console.log('[DEBUG] Dados do formulário:', { objetivo: objetivoValue, nivel: nivelText, frequencia: frequenciaText });
+
+            // Atualizar a Ficha de Treino com os dados
+            workoutView.find('.workout-card-header h2').text(`Treino ${objetivoValue}`);
+            const workoutTags = workoutView.find('.workout-card-tags .chip');
+            if (workoutTags.length > 0) workoutTags.eq(0).text(nivelText);
+            if (workoutTags.length > 1) workoutTags.eq(1).text(frequenciaText);
+
+            // Fechar o modal
+            console.log('[DEBUG] Fechando o modal...');
+            app.sheet.close('#training-sheet');
+
+            // Esconder o estado vazio e mostrar a ficha de treino
+            console.log('[DEBUG] Alternando a visualização...');
+            emptyState.hide();
+            workoutView.show();
+            
+            // Inicializar a barra de progresso
+            console.log('[DEBUG] Atualizando a barra de progresso.');
+            app.progressbar.set(workoutView.find('.progressbar'), 65);
+        });
+    }
+}); 
