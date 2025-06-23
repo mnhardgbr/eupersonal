@@ -3,220 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <title>Gerar Treino - EuPersonal</title>
+    <title>Meus Treinos - EuPersonal</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <link rel="stylesheet" href="../css/index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7-icons/css/framework7-icons.css" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
 
     <style>
-        .sheet-modal {
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-        }
-        .sheet-modal .sheet-modal-inner {
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-        }
-        .sheet-modal::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 4px;
-            background-color: #4b5563;
-            border-radius: 2px;
-        }
-        #training-sheet .block-title {
-            color: #f9fafb;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #d1d5db;
-        }
-        .form-select, .form-input {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border-radius: 0.75rem;
-            background-color: #fff;
-            color: #111827;
-            appearance: none;
-            -webkit-appearance: none;
-            border: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1.25em 1.25em;
-        }
-        .form-input {
-            background-image: none;
-        }
-        .form-select::placeholder, .form-input::placeholder {
-            color: #6b7280;
-        }
-        #training-sheet .button {
-            text-transform: none;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            box-shadow: none;
-            height: 48px;
-            line-height: 48px;
-        }
-        #training-sheet .button-outline {
-            border: 2px solid #fff;
-            color: #007aff;
-        }
-        #training-sheet .button-fill {
-            background-color: #007aff;
-            border: none;
-        }
+        /* Estilos do Empty State e Formulário (mantidos como no original) */
+        #empty-state-container { height: 100%; background-color: #111827; }
+        .empty-state { text-align: center; }
+        .empty-state-icon { font-size: 48px; color: #d1d5db; background-color: #1f2937; border-radius: 50%; width: 90px; height: 90px; line-height: 90px !important; margin-bottom: 1.5rem; display: inline-block; }
+        .empty-state-title { font-size: 1.15rem; font-weight: 600; color: #f9fafb; margin-bottom: 0.5rem; }
+        .empty-state-text { color: #d1d5db; max-width: 300px; margin: 0 auto 1.5rem auto; }
+        #empty-state-container .button { text-transform: none; font-weight: 600; border-radius: 0.75rem; box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25); }
+        .sheet-modal { border-top-left-radius: 20px; border-top-right-radius: 20px; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; }
+        .form-select, .form-input { width: 100%; padding: 0.85rem 1rem; border-radius: 0.75rem; background-color: #fff; color: #111827; border: none; }
 
-        /* Estilos para a Ficha de Treino */
-        .workout-view {
-            padding: 1rem;
-            padding-bottom: 100px; /* Espaço para os botões flutuantes */
-        }
-        .workout-card {
-            background-color: #f8f9fa;
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .workout-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .workout-card-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
-        .workout-card-tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .workout-card-tags .chip {
-            background-color: #e9ecef;
-            color: #495057;
-            font-size: 0.8rem;
-        }
-        .workout-card-description {
-            margin-bottom: 1rem;
-            color: #6c757d;
-        }
-        .progressbar-container {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        .progressbar {
-            height: 8px;
-        }
-        .exercise-list .list-group-title {
-            color: #343a40;
-            font-weight: 600;
-        }
-        .exercise-list .item-content .item-inner {
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
-        .exercise-list .item-title {
-            font-weight: 500;
-        }
-        .exercise-list .item-subtitle {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        .exercise-list .item-after .icon {
-            color: #adb5bd;
-        }
-        .exercise-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #ced4da;
-            border-radius: 50%;
-            margin-right: 16px;
-        }
-        .exercise-checkbox.checked {
-            background-color: #007aff;
-            border-color: #007aff;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .add-exercise-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            background-color: #f8f9fa;
-            border-radius: 0.75rem;
-            color: #495057;
-            font-weight: 500;
-        }
-        .add-exercise-btn i {
-            margin-right: 8px;
-        }
-        .workout-footer-buttons {
-            position: fixed;
-            bottom: 70px; /* Acima da tabbar */
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            background: linear-gradient(to top, #fff, rgba(255,255,255,0.9));
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* Estilos para o Empty State */
-        #empty-state-container {
-            height: 100%;
-            background-color: #111827;
-        }
-        .empty-state {
-            text-align: center;
-        }
-        .empty-state-icon {
-            font-size: 48px;
-            color: #d1d5db;
-            background-color: #1f2937;
-            border-radius: 50%;
-            width: 90px;
-            height: 90px;
-            line-height: 90px !important;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-        }
-        .empty-state-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #f9fafb;
-            margin-bottom: 0.5rem;
-        }
-        .empty-state-text {
-            color: #d1d5db;
-            max-width: 300px;
-            margin: 0 auto 1.5rem auto;
-        }
-        #empty-state-container .button {
-            text-transform: none;
-            font-weight: 600;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
-        }
+        /* Estilos do Card de Treino */
+        .workout-card { background-color: #1f2937; color: #f9fafb; border-radius: 1rem; margin-bottom: 1.5rem; }
+        .workout-card-header h2 { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .workout-card-tags .chip { background-color: #374151; color: #d1d5db; }
+        .exercise-list .list-group-title { color: #9ca3af; font-weight: 600; }
+        .exercise-list .item-content .item-title { color: #f9fafb; }
+        .exercise-list .item-content .item-after { color: #9ca3af; }
     </style>
-
 </head>
 <body>
     <div id="app">
@@ -226,14 +40,14 @@
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
                         <div class="left">
-                            <a href="/../" class="link back">
+                            <a href="/" class="link back">
                                 <i class="icon icon-back"></i>
                             </a>
                         </div>
                         <div class="title">Meus Treinos</div>
                         <div class="right">
-                            <a href="#" class="link">
-                                <i class="icon f7-icons">arrow_clockwise</i>
+                            <a href="#" class="link icon-only" id="logout-button">
+                                <i class="f7-icons">square_arrow_right</i>
                             </a>
                         </div>
                     </div>
@@ -241,225 +55,104 @@
 
                 <div class="page-content">
                     
-                    <div id="empty-state-container" class="display-flex flex-direction-column justify-content-center align-items-center">
+                    <div id="empty-state-container" class="display-flex flex-direction-column justify-content-center align-items-center" style="display: none;">
                         <div class="empty-state">
                             <i class="icon f7-icons empty-state-icon">timer</i>
-                            <div class="empty-state-title">Você ainda não tem um treino cadastrado</div>
-                            <div class="empty-state-text">Responda algumas perguntas rápidas para montarmos um treino perfeito para você.</div>
-                            <a href="#" class="button button-fill button-large sheet-open" data-sheet="#training-sheet">Criar Meu Treino Personalizado</a>
+                            <div class="empty-state-title">Você ainda não tem um treino</div>
+                            <div class="empty-state-text">Crie um plano de treino personalizado para começar sua jornada.</div>
+                            <a href="#" class="button button-fill button-large sheet-open" data-sheet="#training-sheet">Criar Meu Treino</a>
                         </div>
                     </div>
 
-                    <div id="workout-view-container" class="workout-view" style="display: none;">
-                        <div class="workout-card">
-                            <div class="workout-card-header">
-                                <h2>Treino Hipertrofia</h2>
-                                <a href="#" class="link icon-only"><i class="icon f7-icons">square_pencil</i></a>
-                            </div>
-                            <div class="workout-card-tags">
-                                <div class="chip">Intermediário</div>
-                                <div class="chip">4x por semana</div>
-                            </div>
-                            <p class="workout-card-description">Treino focado em ganho de massa muscular com ênfase em membros superiores.</p>
-                            <div class="progressbar-container">
-                                <div class="d-flex justify-content-between"><span>Progresso do treino</span><span>65%</span></div>
-                                <span class="progressbar" data-progress="65"></span>
-                            </div>
+                    <div id="workout-view-container" style="display: none;">
+                        <div class="block">
+                             <a href="#" class="button button-fill button-large sheet-open" data-sheet="#training-sheet">Criar Novo Treino</a>
                         </div>
-
-                        <div class="toolbar-bottom-md">
-                            <div class="toolbar-inner">
-                                <a href="#tab-1" class="tab-link tab-link-active">Segunda</a>
-                                <a href="#tab-2" class="tab-link">Terça</a>
-                                <a href="#tab-3" class="tab-link">Quinta</a>
-                                <a href="#tab-4" class="tab-link">Sexta</a>
-                            </div>
-                        </div>
-
-                        <div class="tabs-animated-wrap">
-                            <div class="tabs">
-                                <div id="tab-1" class="tab tab-active">
-                                    <div class="list exercise-list inset">
-                                        <div class="list-group-title">Treino A - Peito e Tríceps</div>
-                                        <ul>
-                                            <li>
-                                                <div class="item-content">
-                                                    <div class="item-media"><div class="exercise-checkbox checked"></div></div>
-                                                    <div class="item-inner">
-                                                        <div class="item-title-row">
-                                                            <div class="item-title">Supino Reto</div>
-                                                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
-                                                        </div>
-                                                        <div class="item-subtitle">4 séries x 12 repetições</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="item-content">
-                                                    <div class="item-media"><div class="exercise-checkbox checked"></div></div>
-                                                    <div class="item-inner">
-                                                        <div class="item-title-row">
-                                                            <div class="item-title">Crucifixo com Halteres</div>
-                                                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
-                                                        </div>
-                                                        <div class="item-subtitle">3 séries x 15 repetições</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="item-content">
-                                                    <div class="item-media"><div class="exercise-checkbox"></div></div>
-                                                    <div class="item-inner">
-                                                        <div class="item-title-row">
-                                                            <div class="item-title">Tríceps Corda</div>
-                                                            <div class="item-after"><i class="icon f7-icons">chevron_right</i></div>
-                                                        </div>
-                                                        <div class="item-subtitle">4 séries x 12 repetições</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="block">
-                                            <a href="#" class="button add-exercise-btn"><i class="icon f7-icons">plus</i> Adicionar Exercício</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="tab-2" class="tab"><div class="block"><p>Conteúdo da Terça aqui.</p></div></div>
-                                <div id="tab-3" class="tab"><div class="block"><p>Conteúdo da Quinta aqui.</p></div></div>
-                                <div id="tab-4" class="tab"><div class="block"><p>Conteúdo da Sexta aqui.</p></div></div>
-                            </div>
-                        </div>
-
-                        <div class="workout-footer-buttons">
-                            <a href="#" class="button button-large button-outline">Trocar Treino</a>
-                            <a href="#" class="button button-large button-fill">Finalizar Treino</a>
+                        <div id="workout-list" class="block">
+                            <!-- Cards de treino serão inseridos aqui -->
                         </div>
                     </div>
+
                 </div>
+            </div>
+        </div>
 
-                <div class="sheet-modal" id="training-sheet" style="height:70%; --f7-sheet-bg-color: #111827;">
-                    <div class="sheet-modal-inner">
-                        <div class="page-content">
-                            <div class="block-title" style="margin-top: 2rem; font-size: 1.25rem; font-weight: 600; text-align: center;">Monte Seu Treino Personalizado</div>
-                            <div class="block">
-                                <div class="form-group">
-                                    <label class="form-label">Objetivo</label>
-                                    <select class="form-select" id="objetivo-select">
-                                        <option value="Hipertrofia" selected>Ganhar Massa</option>
-                                        <option value="Emagrecimento">Emagrecer</option>
-                                        <option value="Resistência">Melhorar Resistência</option>
-                                        <option value="Saúde Geral">Saúde Geral</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Nível</label>
-                                    <select class="form-select" id="nivel-select">
-                                        <option value="Iniciante">Iniciante</option>
-                                        <option value="Intermediário" selected>Intermediário</option>
-                                        <option value="Avançado">Avançado</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Frequência Semanal</label>
-                                    <select class="form-select" id="frequencia-select">
-                                        <option value="2x por semana">2x por semana</option>
-                                        <option value="3x por semana">3x por semana</option>
-                                        <option value="4x por semana" selected>4x por semana</option>
-                                        <option value="5x por semana">5x por semana</option>
-                                        <option value="6x por semana">6x por semana</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Modalidade</label>
-                                    <select class="form-select">
-                                        <option value="" disabled selected>Selecione a modalidade</option>
-                                        <option value="musculacao">Musculação</option>
-                                        <option value="funcional">Funcional</option>
-                                        <option value="hiit">HIIT</option>
-                                        <option value="cardio">Cardio</option>
-                                        <option value="yoga">Yoga</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Limitações físicas</label>
-                                    <textarea class="form-input" rows="3" placeholder="Descreva qualquer limitação física que você tenha"></textarea>
-                                </div>
+        <div class="sheet-modal" id="training-sheet" style="height: auto; background-color: #1f2937;">
+            <div class="sheet-modal-inner">
+                <div class="page-content">
+                    <div class="block-title block-title-large text-align-center" style="color: #fff;">Criar Novo Treino</div>
+                    <div class="block">
+                        <form id="form-criar-treino">
+                            <div class="form-group">
+                                <label class="form-label">Qual seu objetivo?</label>
+                                <select id="objetivo-select" class="form-select">
+                                    <option value="hipertrofia">Hipertrofia</option>
+                                    <option value="emagrecimento">Emagrecimento</option>
+                                    <option value="resistencia">Resistência</option>
+                                </select>
                             </div>
-                            <div class="block">
-                                <div class="row">
-                                    <div class="col">
-                                        <a href="#" class="button button-large button-outline sheet-close">Cancelar</a>
-                                    </div>
-                                    <div class="col">
-                                        <a href="#" class="button button-large button-fill" id="generateBtn">Gerar Treino</a>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label class="form-label">Seu nível de experiência?</label>
+                                <select id="nivel-select" class="form-select">
+                                    <option value="iniciante">Iniciante</option>
+                                    <option value="intermediario">Intermediário</option>
+                                    <option value="avancado">Avançado</option>
+                                </select>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="toolbar toolbar-bottom tabbar">
-                    <div class="toolbar-inner">
-                         <a href="/" class="tab-link">
-                            <i class="ri-home-4-line"></i>
-                            <span>Início</span>
-                        </a>
-                        <a href="/dieta/" class="tab-link">
-                            <i class="ri-restaurant-line"></i>
-                            <span>Dieta</span>
-                        </a>
-                        <a href="/treinos/" class="tab-link tab-link-active">
-                            <i class="ri-barbell-line"></i>
-                            <span>Treino</span>
-                        </a>
-                        <a href="/perfil/" class="tab-link">
-                            <i class="ri-user-line"></i>
-                            <span>Perfil</span>
-                        </a>
+                            <div class="form-group">
+                                <label class="form-label">Com que frequência treina?</label>
+                                <select id="frequencia-select" class="form-select">
+                                    <option value="3x">3x por semana</option>
+                                    <option value="4x">4x por semana</option>
+                                    <option value="5x">5x+ por semana</option>
+                                </select>
+                            </div>
+                            <div class="block block-strong display-flex flex-direction-row justify-content-space-between">
+                                <a href="#" class="button button-outline sheet-close" style="width: 48%; border-color: #9ca3af; color: #fff;">Cancelar</a>
+                                <a href="#" id="save-workout-btn" class="button button-fill" style="width: 48%;">Salvar Treino</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
-    <script type="module" src="../js/app.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/exercicios-db.js"></script>
+    
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        // Configuração do Supabase
         const supabaseUrl = 'https://llhfrdkeqekwcmssowkl.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaGZyZGt MTY3MDM0fQ.20tFX_A9b06yUTs22-4a_1z4i_IB2i_i_Ch_L0s';
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         const emptyState = document.getElementById('empty-state-container');
         const workoutViewContainer = document.getElementById('workout-view-container');
+        let currentUser = null;
 
-        // Função principal de inicialização
         async function initPage() {
             const { data: { user } } = await supabase.auth.getUser();
+            currentUser = user;
 
-            if (!user) {
-                // Redireciona para login se não houver usuário
+            if (!currentUser) {
                 window.location.href = 'login.html';
                 return;
             }
-            
-            // Se houver usuário, carrega os treinos dele
-            await loadTreinos(user.id);
+            await loadTreinos(currentUser.id);
         }
 
-        // Carrega e renderiza os treinos do usuário
         async function loadTreinos(userId) {
             const { data: treinos, error } = await supabase
                 .from('Treinos')
                 .select('*')
-                .eq('user_id', userId);
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false });
 
             if (error) {
                 console.error('Erro ao buscar treinos:', error);
-                app.dialog.alert('Não foi possível carregar seus treinos. Tente novamente.', 'Erro');
                 return;
             }
 
@@ -473,57 +166,61 @@
             }
         }
 
-        // Renderiza a visualização dos treinos
+        function gerarEstruturaTreino(nivel) {
+            const db = window.exerciciosDB;
+            const peito = db.superiores.peito[0];
+            const costas = db.superiores.costas[0];
+            const pernas = db.inferiores.pernas[0];
+            const abdomen = db.core.abdomen[0];
+            const variacoesNivel = (ex) => ex.variacoes[nivel] || ex.variacoes.iniciante;
+
+            return {
+                "Peito": [{ exercicio: peito.nome, series: variacoesNivel(peito).series, repeticoes: variacoesNivel(peito).repeticoes }],
+                "Costas": [{ exercicio: costas.nome, series: variacoesNivel(costas).series, repeticoes: variacoesNivel(costas).repeticoes }],
+                "Pernas": [{ exercicio: pernas.nome, series: variacoesNivel(pernas).series, repeticoes: variacoesNivel(pernas).repeticoes }],
+                "Abdômen": [{ exercicio: abdomen.nome, series: variacoesNivel(abdomen).series, repeticoes: variacoesNivel(abdomen).repeticoes }]
+            };
+        }
+
         function renderWorkoutView(treinos) {
             const workoutList = document.getElementById('workout-list');
-            workoutList.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+            workoutList.innerHTML = ''; 
 
             treinos.forEach(treino => {
                 const cardHtml = `
-                    <div class="workout-card block block-strong">
-                        <div class="workout-card-header">
-                            <h2>${treino.objetivo}</h2>
+                    <div class="card workout-card">
+                        <div class="card-header">
+                            <div>${treino.nome || 'Meu Treino'}</div>
+                            <div class="chip" style="background-color: #374151; color: #d1d5db; font-size: 12px;">${treino.objetivo}</div>
                         </div>
-                        <div class="workout-card-tags">
-                            <div class="chip">${treino.nivel}</div>
-                            <div class="chip">${treino.frequencia}</div>
-                        </div>
-                        <div class="list exercise-list simple-list">
-                            <ul>
-                                ${Object.entries(treino.exercicios).map(([grupo, lista]) => `
-                                    <li class="list-group-title">${grupo}</li>
-                                    ${lista.map(ex => `
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title">${ex.exercicio}</div>
-                                                    <div class="item-after">${ex.series}x${ex.repeticoes}</div>
+                        <div class="card-content card-content-padding">
+                            <div class="list simple-list exercise-list">
+                                <ul>
+                                    ${Object.entries(treino.exercicios).map(([grupo, lista]) => `
+                                        <li class="list-group-title">${grupo}</li>
+                                        ${lista.map(ex => `
+                                            <li>
+                                                <div class="item-content">
+                                                    <div class="item-inner">
+                                                        <div class="item-title">${ex.exercicio}</div>
+                                                        <div class="item-after">${ex.series}x${ex.repeticoes}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
+                                            </li>
+                                        `).join('')}
                                     `).join('')}
-                                `).join('')}
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 workoutList.innerHTML += cardHtml;
             });
         }
         
-        // Adiciona listeners aos botões após a inicialização do F7
         document.addEventListener('DOMContentLoaded', () => {
-            var app = new Framework7(); // Instância local para garantir
+            const app = window.EuPersonal.app;
+            if (!app) return;
 
-            // Botão para criar treino (no estado vazio)
-            const createWorkoutBtn = document.querySelector('#empty-state-container .button');
-            if (createWorkoutBtn) {
-                createWorkoutBtn.addEventListener('click', () => {
-                    app.sheet.open('#training-sheet');
-                });
-            }
-
-            // Botão para salvar o novo treino do formulário
             const saveBtn = document.getElementById('save-workout-btn');
             if(saveBtn) {
                 saveBtn.addEventListener('click', async () => {
@@ -531,20 +228,54 @@
                     const nivel = document.getElementById('nivel-select').value;
                     const frequencia = document.getElementById('frequencia-select').value;
 
-                    // Lógica para criar um novo treino (placeholder)
-                    console.log('Salvando treino com:', { objetivo, nivel, frequencia });
-                    app.sheet.close('#training-sheet');
-                    
-                    // Aqui você adicionaria a lógica para inserir no Supabase
-                    // e depois recarregar a lista com loadTreinos(user.id)
-                    app.toast.create({ text: 'Funcionalidade a ser implementada!', closeTimeout: 2000 }).open();
+                    if (!currentUser) {
+                        app.dialog.alert('Sessão expirada. Faça o login novamente.', 'Erro');
+                        return;
+                    }
+
+                    const exercicios = gerarEstruturaTreino(nivel);
+                    const nomeTreino = `Treino ${objetivo.charAt(0).toUpperCase() + objetivo.slice(1)}`;
+
+                    const novoTreino = {
+                        user_id: currentUser.id,
+                        objetivo, nivel, frequencia, exercicios,
+                        progresso: 0,
+                        nome: nomeTreino
+                    };
+
+                    app.preloader.show();
+                    const { error } = await supabase.from('Treinos').insert([novoTreino]);
+                    app.preloader.hide();
+
+                    if (error) {
+                        console.error('Erro ao salvar treino:', error);
+                        app.dialog.alert('Não foi possível salvar o treino.', 'Erro');
+                    } else {
+                        app.sheet.close('#training-sheet');
+                        app.toast.create({ text: 'Treino criado com sucesso!', closeTimeout: 2500, cssClass: 'toast-success' }).open();
+                        await loadTreinos(currentUser.id);
+                    }
+                });
+            }
+
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', async () => {
+                    app.dialog.confirm('Deseja realmente sair?', 'Logout', async () => {
+                        app.preloader.show();
+                        const { error } = await supabase.auth.signOut();
+                        app.preloader.hide();
+                        if (error) {
+                            app.dialog.alert('Erro ao fazer logout.', 'Erro');
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    });
                 });
             }
         });
 
-        // Inicia a página
         initPage();
-
     </script>
 </body>
 </html> 
