@@ -136,6 +136,17 @@
         async function initPage() {
             try {
                 console.log('Iniciando verificação de usuário...');
+                
+                // Verificar se já existe uma sessão
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    console.log('Sessão encontrada:', session.user.email);
+                    currentUser = session.user;
+                    await loadTreinos(currentUser.id);
+                    return;
+                }
+                
+                // Se não há sessão, verificar usuário atual
                 const { data: { user }, error } = await supabase.auth.getUser();
                 
                 if (error) {
