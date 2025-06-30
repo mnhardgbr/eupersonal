@@ -134,41 +134,21 @@
         let currentUser = null;
 
         async function initPage() {
-            try {
-                console.log('Iniciando verificação de usuário...');
-                
-                // Verificar se já existe uma sessão
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    console.log('Sessão encontrada:', session.user.email);
-                    currentUser = session.user;
-                    await loadTreinos(currentUser.id);
-                    return;
-                }
-                
-                // Se não há sessão, verificar usuário atual
-                const { data: { user }, error } = await supabase.auth.getUser();
-                
-                if (error) {
-                    console.error('Erro ao verificar usuário:', error);
+            // Escuta mudanças de autenticação
+            supabase.auth.onAuthStateChange(async (event, session) => {
+                if (!session || !session.user) {
                     window.location.href = '/pages/login.html';
                     return;
                 }
-                
-                console.log('Usuário encontrado:', user ? 'Sim' : 'Não');
-                currentUser = user;
-
-                if (!currentUser) {
-                    console.log('Usuário não autenticado, redirecionando para login...');
-                    window.location.href = '/pages/login.html';
-                    return;
-                }
-                
-                console.log('Usuário autenticado, carregando treinos...');
+                currentUser = session.user;
                 await loadTreinos(currentUser.id);
-            } catch (error) {
-                console.error('Erro na inicialização:', error);
-                window.location.href = '/pages/login.html';
+            });
+
+            // Tenta carregar a sessão imediatamente (para casos já autenticados)
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadTreinos(currentUser.id);
             }
         }
 
