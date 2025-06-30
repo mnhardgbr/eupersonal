@@ -187,8 +187,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
-    <script src="../js/app.js"></script>
     <script src="../js/exercicios-db.js"></script>
+    <script src="../js/app.js"></script>
     
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
@@ -244,6 +244,10 @@
 
         function gerarEstruturaTreino(nivel) {
             const db = window.exerciciosDB;
+            if (!db) {
+                console.error('exerciciosDB não está carregado!');
+                return {};
+            }
             const peito = db.superiores.peito[0];
             const costas = db.superiores.costas[0];
             const pernas = db.inferiores.pernas[0];
