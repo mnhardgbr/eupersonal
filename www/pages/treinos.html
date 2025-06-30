@@ -125,8 +125,8 @@
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        const supabaseUrl = 'https://llhfrdkeqekwcmssowkl.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaGZyZGt MTY3MDM0fQ.20tFX_A9b06yUTs22-4a_1z4i_IB2i_i_Ch_L0s';
+        const supabaseUrl = 'https://bntdzvjyemwvpzttptwu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudGR6dmp5ZW13dnB6dHRwdHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMjc3MTEsImV4cCI6MjA2NDcwMzcxMX0.TR-UU4J7AxWOHGLvBf16oQSU_TIkzQ8P536av0-Za0g';
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         const emptyState = document.getElementById('empty-state-container');
@@ -134,14 +134,31 @@
         let currentUser = null;
 
         async function initPage() {
-            const { data: { user } } = await supabase.auth.getUser();
-            currentUser = user;
+            try {
+                console.log('Iniciando verificação de usuário...');
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error) {
+                    console.error('Erro ao verificar usuário:', error);
+                    window.location.href = '/pages/login.html';
+                    return;
+                }
+                
+                console.log('Usuário encontrado:', user ? 'Sim' : 'Não');
+                currentUser = user;
 
-            if (!currentUser) {
+                if (!currentUser) {
+                    console.log('Usuário não autenticado, redirecionando para login...');
+                    window.location.href = '/pages/login.html';
+                    return;
+                }
+                
+                console.log('Usuário autenticado, carregando treinos...');
+                await loadTreinos(currentUser.id);
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
                 window.location.href = '/pages/login.html';
-                return;
             }
-            await loadTreinos(currentUser.id);
         }
 
         async function loadTreinos(userId) {
