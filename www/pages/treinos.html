@@ -301,6 +301,11 @@
             const app = window.EuPersonal.app;
             if (!app) return;
 
+            // Inicializar o sheet manualmente para garantir funcionamento
+            if (!app.sheet.get('#training-sheet')) {
+                app.sheet.create({ el: '#training-sheet' });
+            }
+
             const saveBtn = document.getElementById('save-workout-btn');
             if(saveBtn) {
                 saveBtn.addEventListener('click', async () => {
