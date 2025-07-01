@@ -313,20 +313,32 @@
                         return;
                     }
 
-                    const exercicios = gerarEstruturaTreino(nivel);
-                    const nomeTreino = `Treino ${objetivo.charAt(0).toUpperCase() + objetivo.slice(1)}`;
-
+                    app.preloader.show();
+                    // Buscar treino pronto no Supabase
+                    const { data: treinoPronto, error: erroBusca } = await supabase
+                        .from('TreinosProntos')
+                        .select('*')
+                        .eq('objetivo', objetivo)
+                        .eq('nivel', nivel)
+                        .eq('frequencia', frequencia)
+                        .single();
+                    if (erroBusca || !treinoPronto) {
+                        app.preloader.hide();
+                        app.dialog.alert('Treino pronto não encontrado para essa combinação.', 'Erro');
+                        return;
+                    }
+                    // Salvar treino pronto no perfil do usuário
                     const novoTreino = {
                         user_id: currentUser.id,
-                        objetivo, nivel, frequencia, exercicios,
+                        objetivo,
+                        nivel,
+                        frequencia,
+                        exercicios: treinoPronto.exercicios,
                         progresso: 0,
-                        nome: nomeTreino
+                        nome: `Treino ${objetivo.charAt(0).toUpperCase() + objetivo.slice(1)}`
                     };
-
-                    app.preloader.show();
                     const { error } = await supabase.from('Treinos').insert([novoTreino]);
                     app.preloader.hide();
-
                     if (error) {
                         console.error('Erro ao salvar treino:', error);
                         app.dialog.alert('Não foi possível salvar o treino.', 'Erro');
