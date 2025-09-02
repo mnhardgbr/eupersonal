@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "www",
+  "rewrites": [
+    { "source": "/treinos", "destination": "/pages/treinos.html" },
+    { "source": "/treinos/", "destination": "/pages/treinos.html" },
+    { "source": "/login", "destination": "/pages/login.html" },
+    { "source": "/login/", "destination": "/pages/login.html" }
+  ]
+} 

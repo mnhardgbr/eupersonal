@@ -1,0 +1,86 @@
+/* Geral */
+body, .page-content {
+  background-color: #0e1624;
+  color: white;
+}
+
+/* Meta Diária */
+.card-meta {
+  background-color: #1b2640;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 15px;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 8px;
+  background-color: #2a3b63;
+  border-radius: 5px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
+.progress-fill {
+  height: 100%;
+  background-color: #4da6ff;
+  border-radius: 5px;
+}
+
+/* Bloco de água */
+.agua-box {
+  background-color: #2a3b63;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  margin: 15px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Refeições */
+.refeicoes-box h3 {
+  color: #4da6ff;
+  font-size: 20px;
+  margin: 20px 15px 10px;
+}
+
+/* Itens de alimento */
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1b2640;
+  padding: 12px;
+  margin: 8px 15px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.food-item span {
+  flex-grow: 1;
+}
+
+.edit-btn, .delete-btn {
+  margin-left: 10px;
+  color: #223343;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Botão de adicionar alimento */
+.add-btn {
+  display: block;
+  margin: 10px auto 20px;
+  background-color: #4da6ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Conexão Completo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        .loading { background-color: #fff3cd; border-color: #ffeaa7; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Conexão Completo - Eu Personal</h1>
+    
+    <div class="test-section info">
+        <h3>📋 Informações do Projeto</h3>
+        <p><strong>URL:</strong> https://bntdzvjyemwvpzttptwu.supabase.co</p>
+        <p><strong>Status:</strong> <span id="project-status">Verificando...</span></p>
+    </div>
+
+    <div class="test-section loading">
+        <h3>🌐 Teste de Conectividade</h3>
+        <div id="connectivity-test">Testando conectividade...</div>
+    </div>
+
+    <div class="test-section loading">
+        <h3>🔐 Teste de Autenticação</h3>
+        <div id="auth-test">Testando autenticação...</div>
+    </div>
+
+    <div class="test-section loading">
+        <h3>📊 Teste de Banco de Dados</h3>
+        <div id="database-test">Testando banco de dados...</div>
+    </div>
+
+    <div class="test-section loading">
+        <h3>📝 Teste de Tabela Alunos</h3>
+        <div id="table-test">Testando tabela alunos...</div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Log de Resultados</h3>
+        <div id="log"></div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient(
+            'https://bntdzvjyemwvpzttptwu.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudGR6dmp5ZW13dnB6dHRwdHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMjc3MTEsImV4cCI6MjA2NDcwMzcxMX0.TR-UU4J7AxWOHGLvBf16oQSU_TIkzQ8P536av0-Za0g'
+        );
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            logEntry.className = type;
+            logDiv.appendChild(logEntry);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function updateSection(id, content, className = 'info') {
+            const element = document.getElementById(id);
+            element.innerHTML = content;
+            element.parentElement.className = `test-section ${className}`;
+        }
+
+        async function runTests() {
+            log('🚀 Iniciando testes de conectividade...');
+
+            // Teste 1: Conectividade básica
+            try {
+                log('Testando conectividade básica...');
+                updateSection('connectivity-test', 'Testando...', 'loading');
+                
+                // Teste simples de ping
+                const startTime = Date.now();
+                const { data, error } = await supabase.from('alunos').select('count').limit(1);
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                if (error) {
+                    if (error.message.includes('relation') || error.message.includes('does not exist')) {
+                        updateSection('connectivity-test', 
+                            `✅ Conectividade OK (${responseTime}ms)<br>⚠️ Tabela 'alunos' não existe`, 'success');
+                        log('✅ Conectividade funcionando, mas tabela não existe', 'success');
+                    } else {
+                        updateSection('connectivity-test', 
+                            `❌ Erro de conectividade: ${error.message}`, 'error');
+                        log(`❌ Erro de conectividade: ${error.message}`, 'error');
+                    }
+                } else {
+                    updateSection('connectivity-test', 
+                        `✅ Conectividade OK (${responseTime}ms)`, 'success');
+                    log('✅ Conectividade funcionando perfeitamente', 'success');
+                }
+            } catch (err) {
+                updateSection('connectivity-test', 
+                    `❌ Erro de rede: ${err.message}`, 'error');
+                log(`❌ Erro de rede: ${err.message}`, 'error');
+            }
+
+            // Teste 2: Autenticação
+            try {
+                log('Testando autenticação...');
+                updateSection('auth-test', 'Testando...', 'loading');
+                
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    updateSection('auth-test', 
+                        `❌ Erro de autenticação: ${error.message}`, 'error');
+                    log(`❌ Erro de autenticação: ${error.message}`, 'error');
+                } else {
+                    updateSection('auth-test', 
+                        `✅ Autenticação OK<br>Session: ${session ? 'Ativa' : 'Nenhuma'}`, 'success');
+                    log('✅ Autenticação funcionando', 'success');
+                }
+            } catch (err) {
+                updateSection('auth-test', 
+                    `❌ Erro na autenticação: ${err.message}`, 'error');
+                log(`❌ Erro na autenticação: ${err.message}`, 'error');
+            }
+
+            // Teste 3: Banco de dados
+            try {
+                log('Testando acesso ao banco...');
+                updateSection('database-test', 'Testando...', 'loading');
+                
+                // Tentar listar todas as tabelas
+                const { data: tables, error } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name')
+                    .eq('table_schema', 'public')
+                    .limit(10);
+                
+                if (error) {
+                    updateSection('database-test', 
+                        `❌ Erro ao acessar banco: ${error.message}`, 'error');
+                    log(`❌ Erro ao acessar banco: ${error.message}`, 'error');
+                } else {
+                    const tableNames = tables.map(t => t.table_name).join(', ');
+                    updateSection('database-test', 
+                        `✅ Banco acessível<br>Tabelas: ${tableNames || 'Nenhuma'}`, 'success');
+                    log(`✅ Banco acessível. Tabelas: ${tableNames || 'Nenhuma'}`, 'success');
+                }
+            } catch (err) {
+                updateSection('database-test', 
+                    `❌ Erro no banco: ${err.message}`, 'error');
+                log(`❌ Erro no banco: ${err.message}`, 'error');
+            }
+
+            // Teste 4: Tabela alunos
+            try {
+                log('Testando tabela alunos...');
+                updateSection('table-test', 'Testando...', 'loading');
+                
+                const { data, error } = await supabase
+                    .from('alunos')
+                    .select('*')
+                    .limit(1);
+                
+                if (error) {
+                    if (error.message.includes('relation') || error.message.includes('does not exist')) {
+                        updateSection('table-test', 
+                            `⚠️ Tabela 'alunos' não existe<br>💡 Execute o script SQL no Supabase`, 'error');
+                        log('⚠️ Tabela alunos não existe - precisa ser criada', 'error');
+                    } else {
+                        updateSection('table-test', 
+                            `❌ Erro na tabela: ${error.message}`, 'error');
+                        log(`❌ Erro na tabela: ${error.message}`, 'error');
+                    }
+                } else {
+                    updateSection('table-test', 
+                        `✅ Tabela alunos OK<br>Registros: ${data.length}`, 'success');
+                    log(`✅ Tabela alunos funcionando. Registros: ${data.length}`, 'success');
+                }
+            } catch (err) {
+                updateSection('table-test', 
+                    `❌ Erro ao testar tabela: ${err.message}`, 'error');
+                log(`❌ Erro ao testar tabela: ${err.message}`, 'error');
+            }
+
+            // Atualizar status do projeto
+            const hasErrors = document.querySelectorAll('.error').length > 0;
+            const hasWarnings = document.querySelectorAll('.warning').length > 0;
+            
+            if (hasErrors) {
+                updateSection('project-status', '❌ Problemas detectados', 'error');
+            } else if (hasWarnings) {
+                updateSection('project-status', '⚠️ Funcionando com avisos', 'warning');
+            } else {
+                updateSection('project-status', '✅ Funcionando perfeitamente', 'success');
+            }
+
+            log('🏁 Testes concluídos!', 'success');
+        }
+
+        // Executar testes quando a página carregar
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

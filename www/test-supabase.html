@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Supabase</title>
+</head>
+<body>
+    <h1>Teste de Conexão Supabase</h1>
+    <div id="status">Testando conexão...</div>
+    <div id="result"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient(
+            'https://bntdzvjyemwvpzttptwu.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudGR6dmp5ZW13dnB6dHRwdHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMjc3MTEsImV4cCI6MjA2NDcwMzcxMX0.TR-UU4J7AxWOHGLvBf16oQSU_TIkzQ8P536av0-Za0g'
+        );
+
+        async function testConnection() {
+            try {
+                document.getElementById('status').textContent = 'Testando conexão...';
+                
+                // Testar se consegue acessar o Supabase
+                const { data, error } = await supabase.from('alunos').select('count').limit(1);
+                
+                if (error) {
+                    document.getElementById('status').textContent = 'Erro na conexão:';
+                    document.getElementById('result').textContent = error.message;
+                    console.error('Erro Supabase:', error);
+                } else {
+                    document.getElementById('status').textContent = 'Conexão bem-sucedida!';
+                    document.getElementById('result').textContent = 'Supabase está funcionando corretamente.';
+                    console.log('Conexão OK:', data);
+                }
+            } catch (err) {
+                document.getElementById('status').textContent = 'Erro geral:';
+                document.getElementById('result').textContent = err.message;
+                console.error('Erro geral:', err);
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+</html>

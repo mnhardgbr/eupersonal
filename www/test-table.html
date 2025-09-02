@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Tabela Alunos</title>
+</head>
+<body>
+    <h1>Teste da Tabela Alunos</h1>
+    <div id="status">Testando tabela...</div>
+    <div id="result"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient(
+            'https://bntdzvjyemwvpzttptwu.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJudGR6dmp5ZW13dnB6dHRwdHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMjc3MTEsImV4cCI6MjA2NDcwMzcxMX0.TR-UU4J7AxWOHGLvBf16oQSU_TIkzQ8P536av0-Za0g'
+        );
+
+        async function testTable() {
+            try {
+                document.getElementById('status').textContent = 'Testando tabela alunos...';
+                
+                // Testar se consegue acessar a tabela alunos
+                const { data, error } = await supabase
+                    .from('alunos')
+                    .select('*')
+                    .limit(5);
+                
+                if (error) {
+                    document.getElementById('status').textContent = 'Erro na tabela:';
+                    document.getElementById('result').textContent = error.message;
+                    console.error('Erro tabela alunos:', error);
+                    
+                    // Tentar ver se a tabela existe
+                    if (error.message.includes('relation') || error.message.includes('does not exist')) {
+                        document.getElementById('result').innerHTML += '<br><br><strong>A tabela "alunos" não existe!</strong><br>Você precisa criar esta tabela no Supabase.';
+                    }
+                } else {
+                    document.getElementById('status').textContent = 'Tabela alunos acessível!';
+                    document.getElementById('result').innerHTML = `
+                        <strong>Estrutura da tabela:</strong><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <br>Total de registros: ${data.length}
+                    `;
+                    console.log('Dados da tabela:', data);
+                }
+            } catch (err) {
+                document.getElementById('status').textContent = 'Erro geral:';
+                document.getElementById('result').textContent = err.message;
+                console.error('Erro geral:', err);
+            }
+        }
+
+        testTable();
+    </script>
+</body>
+</html>

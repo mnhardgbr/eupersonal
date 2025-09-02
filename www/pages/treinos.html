@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinos Personalizados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Framework7 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css" />
+    
+    <!-- Framework7 Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7-icons/css/framework7-icons.css" />
+    
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0A0E17',
+                            800: '#121824',
+                            700: '#1A2233',
+                            600: '#232D42'
+                        },
+                        accent: {
+                            cyan: '#00E0FF',
+                            red: '#FF3D71'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0E17;
+        }
+        
+        .question-card {
+            background: linear-gradient(145deg, rgba(26, 34, 51, 0.8), rgba(18, 24, 36, 0.9));
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .option-button {
+            transition: all 0.2s ease;
+        }
+        
+        .option-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .option-selected {
+            background-color: #00E0FF;
+            color: #0A0E17;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #00E0FF, #0072ff);
+        }
+        
+        .empty-state {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .tab-active {
+            color: #00E0FF;
+            border-bottom: 2px solid #00E0FF;
+        }
+        
+        .stat-box {
+            background: linear-gradient(145deg, rgba(26, 34, 51, 0.8), rgba(18, 24, 36, 0.9));
+            border: 1px solid rgba(35, 45, 66, 0.5);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-white min-h-screen">
+    <div class="max-w-md mx-auto pb-20">
+        <!-- Cabeçalho -->
+        <header class="bg-dark-800 p-4 flex items-center sticky top-0 z-10 shadow-lg">
+            <button onclick="window.location.href='home.html'" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-dark-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left">
+                    <path d="m15 18-6-6 6-6"/>
+                </svg>
+            </button>
+            <h1 class="text-xl font-semibold ml-4">Treinos</h1>
+        </header>
+
+        <!-- Estado vazio - Sem treinos -->
+        <div id="emptyState" class="empty-state p-6">
+            <!-- Ilustração -->
+            <div class="flex justify-center mb-6 mt-8">
+                <div class="w-32 h-32 bg-dark-800 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan opacity-60">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                        <line x1="6" x2="6" y1="1" y2="4"/>
+                        <line x1="10" x2="10" y1="1" y2="4"/>
+                        <line x1="14" x2="14" y1="1" y2="4"/>
+                    </svg>
+                        </div>
+                        </div>
+            
+            <!-- Mensagem -->
+            <div class="text-center mb-8">
+                <h2 class="text-xl font-semibold mb-3">Você ainda não tem um treino</h2>
+                <p class="text-gray-400 leading-relaxed">Crie um plano de treino personalizado para começar sua jornada.</p>
+                    </div>
+            
+            <!-- Botão para iniciar questionário -->
+            <button onclick="startQuestionnaire()" class="w-full bg-accent-cyan text-dark-900 font-semibold py-4 rounded-xl flex items-center justify-center hover:bg-opacity-90 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                    <path d="M21 2v6h-6"/>
+                    <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+                    <path d="M3 22v-6h6"/>
+                    <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                </svg>
+                Criar Treino Personalizado
+            </button>
+                </div>
+
+        <!-- Questionário -->
+        <div id="questionnaire" class="hidden p-4">
+            <!-- Barra de progresso -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-400">Progresso</span>
+                    <span id="progressText" class="text-sm text-accent-cyan">1 de 6</span>
+                </div>
+                <div class="w-full bg-dark-700 rounded-full h-2">
+                    <div id="progressBar" class="progress-bar h-2 rounded-full transition-all duration-300" style="width: 16.67%"></div>
+                </div>
+            </div>
+
+            <!-- Pergunta 1: Objetivo -->
+            <div id="question1" class="question-card rounded-xl p-6 mb-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M18.618 18.619a9 9 0 0 1-12.72-12.72"/>
+                        <path d="M5.382 5.381a9 9 0 0 0 12.72 12.72"/>
+                        <circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    Qual é o seu objetivo principal?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(1, 'hipertrofia', this)">
+                        <div class="font-medium">Ganhar massa muscular</div>
+                        <div class="text-sm text-gray-400">Hipertrofia e definição</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(1, 'emagrecimento', this)">
+                        <div class="font-medium">Perder peso</div>
+                        <div class="text-sm text-gray-400">Queima de gordura</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(1, 'condicionamento', this)">
+                        <div class="font-medium">Melhorar condicionamento</div>
+                        <div class="text-sm text-gray-400">Resistência e força</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(1, 'manutencao', this)">
+                        <div class="font-medium">Manter a forma</div>
+                        <div class="text-sm text-gray-400">Saúde e bem-estar</div>
+                    </button>
+                        </div>
+                    </div>
+
+            <!-- Pergunta 2: Experiência -->
+            <div id="question2" class="question-card rounded-xl p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Qual é o seu nível de experiência?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(2, 'iniciante', this)">
+                        <div class="font-medium">Iniciante</div>
+                        <div class="text-sm text-gray-400">Menos de 6 meses</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(2, 'intermediario', this)">
+                        <div class="font-medium">Intermediário</div>
+                        <div class="text-sm text-gray-400">6 meses a 2 anos</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(2, 'avancado', this)">
+                        <div class="font-medium">Avançado</div>
+                        <div class="text-sm text-gray-400">Mais de 2 anos</div>
+                    </button>
+                        </div>
+            </div>
+
+            <!-- Pergunta 3: Frequência -->
+            <div id="question3" class="question-card rounded-xl p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                        <line x1="16" x2="16" y1="2" y2="6"/>
+                        <line x1="8" x2="8" y1="2" y2="6"/>
+                        <line x1="3" x2="21" y1="10" y2="10"/>
+                    </svg>
+                    Quantos dias por semana você pode treinar?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(3, '2-3', this)">
+                        <div class="font-medium">2-3 dias por semana</div>
+                        <div class="text-sm text-gray-400">Iniciante ou pouco tempo</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(3, '4-5', this)">
+                        <div class="font-medium">4-5 dias por semana</div>
+                        <div class="text-sm text-gray-400">Rotina regular</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(3, '6', this)">
+                        <div class="font-medium">6 dias por semana</div>
+                        <div class="text-sm text-gray-400">Dedicação alta</div>
+                    </button>
+                        </div>
+                    </div>
+
+            <!-- Pergunta 4: Duração -->
+            <div id="question4" class="question-card rounded-xl p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Quanto tempo você tem por treino?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(4, '30-45', this)">
+                        <div class="font-medium">30-45 minutos</div>
+                        <div class="text-sm text-gray-400">Treino rápido e eficiente</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(4, '45-60', this)">
+                        <div class="font-medium">45-60 minutos</div>
+                        <div class="text-sm text-gray-400">Duração padrão</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(4, '60+', this)">
+                        <div class="font-medium">Mais de 60 minutos</div>
+                        <div class="text-sm text-gray-400">Treino longo e detalhado</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pergunta 5: Local -->
+            <div id="question5" class="question-card rounded-xl p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9"/>
+                        <path d="M9 22V12h6v10"/>
+                        <path d="M2 10.6L12 2l10 8.6"/>
+                    </svg>
+                    Onde você pretende treinar?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(5, 'academia', this)">
+                        <div class="font-medium">Academia</div>
+                        <div class="text-sm text-gray-400">Equipamentos completos</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(5, 'casa', this)">
+                        <div class="font-medium">Em casa</div>
+                        <div class="text-sm text-gray-400">Equipamentos básicos</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(5, 'ambos', this)">
+                        <div class="font-medium">Academia e casa</div>
+                        <div class="text-sm text-gray-400">Flexibilidade total</div>
+                    </button>
+            </div>
+        </div>
+
+            <!-- Pergunta 6: Limitações -->
+            <div id="question6" class="question-card rounded-xl p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    Você tem alguma limitação física?
+                </h3>
+                <div class="space-y-3">
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(6, 'nenhuma', this)">
+                        <div class="font-medium">Nenhuma limitação</div>
+                        <div class="text-sm text-gray-400">Posso fazer qualquer exercício</div>
+                                </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(6, 'joelho', this)">
+                        <div class="font-medium">Problemas no joelho</div>
+                        <div class="text-sm text-gray-400">Evitar impacto alto</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(6, 'coluna', this)">
+                        <div class="font-medium">Problemas na coluna</div>
+                        <div class="text-sm text-gray-400">Cuidado com sobrecarga</div>
+                    </button>
+                    <button class="option-button w-full p-4 bg-dark-700 rounded-lg text-left hover:bg-dark-600" onclick="selectOption(6, 'outras', this)">
+                        <div class="font-medium">Outras limitações</div>
+                        <div class="text-sm text-gray-400">Treino adaptado</div>
+                    </button>
+                        </div>
+                    </div>
+
+            <!-- Botão finalizar -->
+            <div id="finishButton" class="hidden">
+                <button onclick="generateWorkout()" class="w-full bg-accent-cyan text-dark-900 font-semibold py-4 rounded-xl flex items-center justify-center hover:bg-opacity-90 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                        <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                    Gerar Meu Treino Personalizado
+                </button>
+                </div>
+            </div>
+
+        <!-- Tabela de Treinos -->
+        <div id="workoutTable" class="hidden p-4">
+            <!-- Painel de informações do treino -->
+            <section class="mb-6">
+                <h2 class="text-lg font-semibold mb-3 text-gray-300">Informações do Treino</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Duração -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col">
+                        <span class="text-xs text-gray-400 mb-1">Duração</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span class="font-semibold">45 min</span>
+        </div>
+    </div>
+
+                    <!-- Intensidade -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col">
+                        <span class="text-xs text-gray-400 mb-1">Intensidade</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <path d="m8 18 4-6 4 2-4 6-4-2z"/>
+                                <path d="m12 12-4-2-2 4 4 2 2-4z"/>
+                                <path d="M12 12v-6"/>
+                            </svg>
+                            <span class="font-semibold">Moderada</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Foco -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col">
+                        <span class="text-xs text-gray-400 mb-1">Foco</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <path d="M18.618 18.619a9 9 0 0 1-12.72-12.72"/>
+                                <path d="M5.382 5.381a9 9 0 0 0 12.72 12.72"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                            <span class="font-semibold">Hipertrofia</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Frequência -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col">
+                        <span class="text-xs text-gray-400 mb-1">Frequência</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                            <span class="font-semibold">4x semana</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Zona alvo -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col col-span-2">
+                        <span class="text-xs text-gray-400 mb-1">Zona alvo</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                            <span class="font-semibold">130-150 BPM</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Última atualização -->
+                    <div class="stat-box rounded-xl p-4 flex flex-col col-span-2">
+                        <span class="text-xs text-gray-400 mb-1">Última atualização</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" x2="12" y1="3" y2="15"/>
+                            </svg>
+                            <span class="font-semibold">Hoje - 16:45</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Botões principais -->
+            <section class="flex gap-3 mb-6">
+                <button class="flex-1 bg-accent-red rounded-lg py-3 font-medium flex items-center justify-center hover:bg-opacity-90 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                        <path d="M16 16h5v5"/>
+                    </svg>
+                    Atualizar Dados
+                </button>
+                <button class="flex-1 bg-accent-cyan rounded-lg py-3 font-medium flex items-center justify-center hover:bg-opacity-90 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                        <path d="M21 2v6h-6"/>
+                        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+                        <path d="M3 22v-6h6"/>
+                        <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                    </svg>
+                    Gerar Novo Treino
+                </button>
+            </section>
+
+            <!-- Seleção de ambiente -->
+            <section class="mb-6">
+                <div class="flex rounded-lg overflow-hidden">
+                    <button id="academiaBtn" class="flex-1 py-3 bg-accent-cyan font-semibold text-sm" onclick="switchEnvironment('academia')">
+                        ACADEMIA
+                    </button>
+                    <button id="casaBtn" class="flex-1 py-3 bg-dark-600 font-semibold text-sm text-gray-400" onclick="switchEnvironment('casa')">
+                        CASA
+                    </button>
+                </div>
+            </section>
+
+            <!-- Cronograma Semanal -->
+            <section class="mb-6">
+                <h3 class="text-lg font-semibold mb-3 text-gray-300">Cronograma Semanal</h3>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <button id="semana1" class="py-2 px-3 bg-accent-cyan text-dark-900 font-semibold text-sm rounded-lg" onclick="switchWeek(1)">
+                        SEMANA 1
+                    </button>
+                    <button id="semana2" class="py-2 px-3 bg-dark-600 text-gray-400 font-semibold text-sm rounded-lg" onclick="switchWeek(2)">
+                        SEMANA 2
+                    </button>
+                    <button id="semana3" class="py-2 px-3 bg-dark-600 text-gray-400 font-semibold text-sm rounded-lg" onclick="switchWeek(3)">
+                        SEMANA 3
+                    </button>
+                </div>
+                
+                <!-- Abas de treino da semana -->
+                <div class="flex border-b border-dark-600 mb-4">
+                    <div id="treinosSemana" class="flex w-full">
+                        <!-- Treinos serão inseridos dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Container de Exercícios -->
+            <section id="exercisesContainer">
+                <h2 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 1 0-4 4H6a4 4 0 1 0-4-4V8z"/>
+                        <line x1="6" x2="6" y1="1" y2="4"/>
+                        <line x1="10" x2="10" y1="1" y2="4"/>
+                        <line x1="14" x2="14" y1="1" y2="4"/>
+                    </svg>
+                    Treino da Semana
+                </h2>
+                <div class="space-y-4">
+                    <!-- Exercícios serão inseridos dinamicamente -->
+                </div>
+            </section>
+
+            <!-- Exercícios do Treino B -->
+            <section id="exercisesB" class="hidden">
+                <h2 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 1 0-4 4H6a4 4 0 1 0-4-4V8z"/>
+                        <line x1="6" x2="6" y1="1" y2="4"/>
+                        <line x1="10" x2="10" y1="1" y2="4"/>
+                        <line x1="14" x2="14" y1="1" y2="4"/>
+                    </svg>
+                    Treino B - Costas e Bíceps
+                </h2>
+                <div class="space-y-4">
+                    <!-- Exercícios serão inseridos dinamicamente -->
+                </div>
+            </section>
+
+            <!-- Exercícios do Treino C -->
+            <section id="exercisesC" class="hidden">
+                <h2 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 1 0-4 4H6a4 4 0 1 0-4-4V8z"/>
+                        <line x1="6" x2="6" y1="1" y2="4"/>
+                        <line x1="10" x2="10" y1="1" y2="4"/>
+                        <line x1="14" x2="14" y1="1" y2="4"/>
+                    </svg>
+                    Treino C - Pernas e Ombros
+                </h2>
+                <div class="space-y-4">
+                    <!-- Exercícios serão inseridos dinamicamente -->
+                </div>
+            </section>
+
+            <!-- Exercícios do Treino D -->
+            <section id="exercisesD" class="hidden">
+                <h2 class="text-lg font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan mr-2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 1 0-4 4H6a4 4 0 1 0-4-4V8z"/>
+                        <line x1="6" x2="6" y1="1" y2="4"/>
+                        <line x1="10" x2="10" y1="1" y2="4"/>
+                        <line x1="14" x2="14" y1="1" y2="4"/>
+                    </svg>
+                    Treino D - Abdômen e Cardio
+                </h2>
+                <div class="space-y-4">
+                    <!-- Exercícios serão inseridos dinamicamente -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Menu de navegação fixo na parte inferior -->
+        <div class="toolbar toolbar-bottom tabbar">
+          <div class="toolbar-inner">
+            <a href="home.html" class="tab-link">
+              <i class="ri-home-4-line"></i>
+              <span>Início</span>
+            </a>
+            <a href="dieta.html" class="tab-link">
+              <i class="ri-restaurant-line"></i>
+              <span>Dieta</span>
+            </a>
+            <a href="treinos.html" class="tab-link tab-link-active">
+              <i class="ri-barbell-line"></i>
+              <span>Treino</span>
+            </a>
+            <a href="perfil.html" class="tab-link">
+              <i class="ri-user-line"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        let answers = {};
+        
+        // Biblioteca completa de exercícios com vídeos do YouTube
+        const exerciseLibrary = {
+            // PEITO
+            peito: {
+                hipertrofia: [
+                    { nome: "Supino Reto com Halteres", video: "https://youtu.be/fbupGf-T4KM", series: 4, reps: "8-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Supino Reto Barra", video: "https://youtu.be/Kr2erpSyu3M", series: 4, reps: "8-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Supino Inclinado Barra", video: "https://youtu.be/oZjIQN0YMX0", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Crucifixo CrossOver", video: "https://youtu.be/o90Pm6qTeNI", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Crucifixo Voador", video: "https://youtu.be/1D9x_U6PkY8", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" }
+                ],
+                emagrecimento: [
+                    { nome: "Supino Reto Barra", video: "https://youtu.be/Kr2erpSyu3M", series: 3, reps: "15-20", descanso: "45s", grupo: "composto" },
+                    { nome: "Supino Inclinado Halteres", video: "https://www.youtube.com/watch?v=F4Q1g2z8MWM", series: 3, reps: "15-20", descanso: "45s", grupo: "composto" },
+                    { nome: "Crucifixo CrossOver", video: "https://youtu.be/o90Pm6qTeNI", series: 3, reps: "20-25", descanso: "30s", grupo: "isolamento" },
+                    { nome: "Flexão de Braço", video: "https://youtu.be/RNWiy0kp40k", series: 3, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ],
+                condicionamento: [
+                    { nome: "Supino Reto Barra", video: "https://youtu.be/Kr2erpSyu3M", series: 4, reps: "12-15", descanso: "60s", grupo: "composto" },
+                    { nome: "Supino Inclinado Halteres", video: "https://www.youtube.com/watch?v=F4Q1g2z8MWM", series: 3, reps: "12-15", descanso: "60s", grupo: "composto" },
+                    { nome: "Flexão de Braço", video: "https://youtu.be/RNWiy0kp40k", series: 4, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ]
+            },
+            
+            // COSTAS
+            costas: {
+                hipertrofia: [
+                    { nome: "Barra Fixa (Pull up)", video: "https://youtu.be/CKvMi8Shz9g", series: 4, reps: "6-10", descanso: "90s", grupo: "composto" },
+                    { nome: "Puxador Frente Pegada Aberta", video: "https://youtu.be/Xn-fIQw08q4", series: 4, reps: "8-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Remada Curvada Pegada Invertida", video: "https://youtu.be/U0YF_ADlmPg", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Remada Unilateral Halteres", video: "https://youtu.be/EUisRaNkCd4", series: 3, reps: "10-12", descanso: "60s", grupo: "composto" }
+                ],
+                emagrecimento: [
+                    { nome: "Puxador Frente Pegada Aberta", video: "https://youtu.be/Xn-fIQw08q4", series: 3, reps: "15-20", descanso: "45s", grupo: "composto" },
+                    { nome: "Remada Curvada Pegada Invertida", video: "https://youtu.be/U0YF_ADlmPg", series: 3, reps: "15-20", descanso: "45s", grupo: "composto" },
+                    { nome: "Remada Invertida", video: "https://youtu.be/uXbK1u0-0TE", series: 3, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ],
+                condicionamento: [
+                    { nome: "Barra Fixa (Pull up)", video: "https://youtu.be/CKvMi8Shz9g", series: 4, reps: "máximo", descanso: "60s", grupo: "composto" },
+                    { nome: "Puxador Frente Pegada Aberta", video: "https://youtu.be/Xn-fIQw08q4", series: 3, reps: "12-15", descanso: "60s", grupo: "composto" },
+                    { nome: "Remada Invertida", video: "https://youtu.be/uXbK1u0-0TE", series: 4, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ]
+            },
+            
+            // OMBROS
+            ombros: {
+                hipertrofia: [
+                    { nome: "Desenvolvimento Barra", video: "https://youtu.be/o2LfBH1I8r8", series: 4, reps: "8-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Desenvolvimento Halteres", video: "https://youtu.be/L-iQfHVeuVg", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Elevação Lateral com Halteres", video: "https://youtu.be/qDAoUOmdbi4", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Elevação Frontal com Halteres", video: "https://youtu.be/jhxLYSm_P-k", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" }
+                ],
+                emagrecimento: [
+                    { nome: "Desenvolvimento Halteres", video: "https://youtu.be/L-iQfHVeuVg", series: 3, reps: "15-20", descanso: "45s", grupo: "composto" },
+                    { nome: "Elevação Lateral com Halteres", video: "https://youtu.be/qDAoUOmdbi4", series: 3, reps: "20-25", descanso: "30s", grupo: "isolamento" },
+                    { nome: "Desenvolvimento Invertido Pés Apoiado", video: "https://youtu.be/XckEEwa1BPI", series: 3, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ],
+                condicionamento: [
+                    { nome: "Desenvolvimento Halteres", video: "https://youtu.be/L-iQfHVeuVg", series: 4, reps: "12-15", descanso: "60s", grupo: "composto" },
+                    { nome: "Elevação Lateral com Halteres", video: "https://youtu.be/qDAoUOmdbi4", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Desenvolvimento Invertido Pés Apoiado", video: "https://youtu.be/XckEEwa1BPI", series: 4, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ]
+            },
+            
+            // TRÍCEPS
+            triceps: {
+                hipertrofia: [
+                    { nome: "Triceps Testa Barra", video: "https://youtu.be/oqob5MHbzBc", series: 4, reps: "8-12", descanso: "90s", grupo: "isolamento" },
+                    { nome: "Triceps Pulley com Corda", video: "https://www.youtube.com/watch?v=AIKKKRaBSVI", series: 3, reps: "10-12", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Triceps Coice", video: "https://youtu.be/VYKCqSeF1n8", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Tríceps Paralela", video: "https://youtu.be/TB0HLYUXtos", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" }
+                ],
+                emagrecimento: [
+                    { nome: "Triceps Testa Barra", video: "https://youtu.be/oqob5MHbzBc", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Triceps Pulley com Corda", video: "https://www.youtube.com/watch?v=AIKKKRaBSVI", series: 3, reps: "20-25", descanso: "30s", grupo: "isolamento" },
+                    { nome: "Tríceps no Banco", video: "https://youtu.be/XXvuYGCxpkk", series: 3, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ],
+                condicionamento: [
+                    { nome: "Triceps Testa Barra", video: "https://youtu.be/oqob5MHbzBc", series: 4, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Triceps Pulley com Corda", video: "https://www.youtube.com/watch?v=AIKKKRaBSVI", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Tríceps no Banco", video: "https://youtu.be/XXvuYGCxpkk", series: 4, reps: "máximo", descanso: "45s", grupo: "composto" }
+                ]
+            },
+            
+            // BÍCEPS
+            biceps: {
+                hipertrofia: [
+                    { nome: "Rosca com Halteres", video: "https://youtu.be/k31LK_VASok", series: 4, reps: "8-12", descanso: "90s", grupo: "isolamento" },
+                    { nome: "Rosca Direta com Barra", video: "https://youtu.be/s4B8UW3BMqk", series: 3, reps: "10-12", descanso: "90s", grupo: "isolamento" },
+                    { nome: "Rosca Martelo", video: "https://youtu.be/5vPGH1uTtbs", series: 3, reps: "10-12", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Rosca Scott com Barra", video: "https://youtu.be/Kh4G5N48EO8", series: 3, reps: "10-12", descanso: "60s", grupo: "isolamento" }
+                ],
+                emagrecimento: [
+                    { nome: "Rosca com Halteres", video: "https://youtu.be/k31LK_VASok", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Rosca Direta com Barra", video: "https://youtu.be/s4B8UW3BMqk", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Rosca Martelo", video: "https://youtu.be/5vPGH1uTtbs", series: 3, reps: "20-25", descanso: "30s", grupo: "isolamento" }
+                ],
+                condicionamento: [
+                    { nome: "Rosca com Halteres", video: "https://youtu.be/k31LK_VASok", series: 4, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Rosca Direta com Barra", video: "https://youtu.be/s4B8UW3BMqk", series: 3, reps: "12-15", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Rosca Martelo", video: "https://youtu.be/5vPGH1uTtbs", series: 3, reps: "15-20", descanso: "45s", grupo: "isolamento" }
+                ]
+            },
+            
+            // PERNAS
+            pernas: {
+                hipertrofia: [
+                    { nome: "Agachamento Livre", video: "https://youtu.be/WLw3eRGkM5U", series: 4, reps: "8-12", descanso: "120s", grupo: "composto" },
+                    { nome: "Leg Press 45°", video: "https://youtu.be/9ruGCg0m9Tw", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Afundo com Halteres", video: "https://youtu.be/6SHmjfEAwe0", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" },
+                    { nome: "Stiff com Barra", video: "https://youtu.be/IcYm66xwfsg", series: 3, reps: "10-12", descanso: "90s", grupo: "composto" }
+                ],
+                emagrecimento: [
+                    { nome: "Agachamento Livre", video: "https://youtu.be/WLw3eRGkM5U", series: 3, reps: "15-20", descanso: "60s", grupo: "composto" },
+                    { nome: "Leg Press 45°", video: "https://youtu.be/9ruGCg0m9Tw", series: 3, reps: "20-25", descanso: "45s", grupo: "composto" },
+                    { nome: "Afundo com Halteres", video: "https://youtu.be/6SHmjfEAwe0", series: 3, reps: "15-20", descanso: "60s", grupo: "composto" }
+                ],
+                condicionamento: [
+                    { nome: "Agachamento Livre", video: "https://youtu.be/WLw3eRGkM5U", series: 4, reps: "12-15", descanso: "90s", grupo: "composto" },
+                    { nome: "Leg Press 45°", video: "https://youtu.be/9ruGCg0m9Tw", series: 3, reps: "15-20", descanso: "60s", grupo: "composto" },
+                    { nome: "Afundo com Halteres", video: "https://youtu.be/6SHmjfEAwe0", series: 4, reps: "15-20", descanso: "60s", grupo: "composto" }
+                ]
+            },
+            
+            // ABDOMINAL
+            abdominal: {
+                hipertrofia: [
+                    { nome: "Abdominal Supra", video: "https://youtu.be/mfkfUkj24co", series: 3, reps: "15-20", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Abdominal Remador", video: "https://youtu.be/uje7YsAHcs4", series: 3, reps: "15-20", descanso: "60s", grupo: "isolamento" },
+                    { nome: "Prancha Frontal", video: "https://youtu.be/a6JT9hOy5Rs", series: 3, reps: "30-45s", descanso: "60s", grupo: "isometria" }
+                ],
+                emagrecimento: [
+                    { nome: "Abdominal Supra", video: "https://youtu.be/mfkfUkj24co", series: 3, reps: "25-30", descanso: "30s", grupo: "isolamento" },
+                    { nome: "Abdominal Remador", video: "https://youtu.be/uje7YsAHcs4", series: 3, reps: "25-30", descanso: "30s", grupo: "isolamento" },
+                    { nome: "Prancha Frontal", video: "https://youtu.be/a6JT9hOy5Rs", series: 3, reps: "45-60s", descanso: "45s", grupo: "isometria" }
+                ],
+                condicionamento: [
+                    { nome: "Abdominal Supra", video: "https://youtu.be/mfkfUkj24co", series: 4, reps: "20-25", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Abdominal Remador", video: "https://youtu.be/uje7YsAHcs4", series: 3, reps: "20-25", descanso: "45s", grupo: "isolamento" },
+                    { nome: "Prancha Frontal", video: "https://youtu.be/a6JT9hOy5Rs", series: 4, reps: "45-60s", descanso: "60s", grupo: "isometria" }
+                ]
+            }
+        };
+        
+        // Função para gerar treino personalizado com cronograma semanal
+        function generatePersonalizedWorkout() {
+            const objetivo = answers[1];
+            const experiencia = answers[2];
+            const frequencia = answers[3];
+            const duracao = answers[4];
+            const local = answers[5];
+            const limitacoes = answers[6];
+            
+            // Ajusta intensidade baseado na experiência
+            let intensidade = 'moderada';
+            if (experiencia === 'iniciante') intensidade = 'leve';
+            if (experiencia === 'avancado') intensidade = 'alta';
+            
+            // Ajusta duração baseado na disponibilidade
+            let duracaoTreino = '45-60';
+            if (duracao === '30-45') duracaoTreino = '30-45';
+            if (duracao === '60+') duracaoTreino = '60-75';
+            
+            // Gera cronograma semanal baseado na frequência
+            const cronograma = generateWeeklySchedule(frequencia, objetivo, local, limitacoes);
+            
+            return {
+                objetivo,
+                experiencia,
+                frequencia,
+                duracao: duracaoTreino,
+                intensidade,
+                cronograma,
+                local,
+                limitacoes,
+                dataInicio: new Date().toISOString().split('T')[0],
+                semanaAtual: 1
+            };
+        }
+        
+        // Função para gerar cronograma semanal
+        function generateWeeklySchedule(frequencia, objetivo, local, limitacoes) {
+            let cronograma = {};
+            
+            if (frequencia === '2-3') {
+                // 2-3 dias por semana: Ciclo de 3 semanas
+                cronograma = {
+                    semanas: 3,
+                    treinosPorSemana: 2,
+                    estrutura: {
+                        1: { // Semana 1
+                            treino1: {
+                                nome: "Treino A - Peito e Tríceps",
+                                grupos: ['peito', 'triceps'],
+                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 4)
+                            },
+                            treino2: {
+                                nome: "Treino B - Costas e Bíceps",
+                                grupos: ['costas', 'biceps'],
+                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 4)
+                            }
+                        },
+                        2: { // Semana 2
+                            treino1: {
+                                nome: "Treino C - Pernas e Ombros",
+                                grupos: ['pernas', 'ombros'],
+                                exercicios: generateExercises(['pernas', 'ombros'], objetivo, local, limitacoes, 4)
+                            },
+                            treino2: {
+                                nome: "Treino D - Abdômen e Cardio",
+                                grupos: ['abdominal'],
+                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 3)
+                            }
+                        },
+                        3: { // Semana 3
+                            treino1: {
+                                nome: "Treino E - Full Body",
+                                grupos: ['peito', 'costas', 'pernas'],
+                                exercicios: generateExercises(['peito', 'costas', 'pernas'], objetivo, local, limitacoes, 3)
+                            },
+                            treino2: {
+                                nome: "Treino F - Isolamento",
+                                grupos: ['biceps', 'triceps', 'ombros'],
+                                exercicios: generateExercises(['biceps', 'triceps', 'ombros'], objetivo, local, limitacoes, 3)
+                            }
+                        }
+                    }
+                };
+            } else if (frequencia === '4-5') {
+                // 4-5 dias por semana: Ciclo de 2 semanas
+                cronograma = {
+                    semanas: 2,
+                    treinosPorSemana: 4,
+                    estrutura: {
+                        1: { // Semana 1
+                            treino1: {
+                                nome: "Treino A - Peito e Tríceps",
+                                grupos: ['peito', 'triceps'],
+                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 4)
+                            },
+                            treino2: {
+                                nome: "Treino B - Costas e Bíceps",
+                                grupos: ['costas', 'biceps'],
+                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 4)
+                            },
+                            treino3: {
+                                nome: "Treino C - Pernas",
+                                grupos: ['pernas'],
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                            },
+                            treino4: {
+                                nome: "Treino D - Ombros e Abdômen",
+                                grupos: ['ombros', 'abdominal'],
+                                exercicios: generateExercises(['ombros', 'abdominal'], objetivo, local, limitacoes, 4)
+                            }
+                        },
+                        2: { // Semana 2
+                            treino1: {
+                                nome: "Treino E - Peito e Ombros",
+                                grupos: ['peito', 'ombros'],
+                                exercicios: generateExercises(['peito', 'ombros'], objetivo, local, limitacoes, 4)
+                            },
+                            treino2: {
+                                nome: "Treino F - Costas e Abdômen",
+                                grupos: ['costas', 'abdominal'],
+                                exercicios: generateExercises(['costas', 'abdominal'], objetivo, local, limitacoes, 4)
+                            },
+                            treino3: {
+                                nome: "Treino G - Pernas e Glúteos",
+                                grupos: ['pernas'],
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                            },
+                            treino4: {
+                                nome: "Treino H - Bíceps e Tríceps",
+                                grupos: ['biceps', 'triceps'],
+                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 4)
+                            }
+                        }
+                    }
+                };
+            } else if (frequencia === '6') {
+                // 6 dias por semana: Ciclo de 1 semana
+                cronograma = {
+                    semanas: 1,
+                    treinosPorSemana: 6,
+                    estrutura: {
+                        1: { // Semana 1
+                            treino1: {
+                                nome: "Treino A - Peito",
+                                grupos: ['peito'],
+                                exercicios: generateExercises(['peito'], objetivo, local, limitacoes, 5)
+                            },
+                            treino2: {
+                                nome: "Treino B - Costas",
+                                grupos: ['costas'],
+                                exercicios: generateExercises(['costas'], objetivo, local, limitacoes, 5)
+                            },
+                            treino3: {
+                                nome: "Treino C - Pernas",
+                                grupos: ['pernas'],
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                            },
+                            treino4: {
+                                nome: "Treino D - Ombros",
+                                grupos: ['ombros'],
+                                exercicios: generateExercises(['ombros'], objetivo, local, limitacoes, 4)
+                            },
+                            treino5: {
+                                nome: "Treino E - Bíceps e Tríceps",
+                                grupos: ['biceps', 'triceps'],
+                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 4)
+                            },
+                            treino6: {
+                                nome: "Treino F - Abdômen e Cardio",
+                                grupos: ['abdominal'],
+                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 4)
+                            }
+                        }
+                    }
+                };
+            }
+            
+            return cronograma;
+        }
+        
+        // Função para gerar exercícios específicos
+        function generateExercises(gruposMusculares, objetivo, local, limitacoes, numExercicios) {
+            let exercicios = [];
+            
+            gruposMusculares.forEach(grupo => {
+                if (exerciseLibrary[grupo] && exerciseLibrary[grupo][objetivo]) {
+                    const exerciciosDisponiveis = exerciseLibrary[grupo][objetivo];
+                    
+                    // Filtra exercícios baseado no local de treino
+                    let exerciciosFiltrados = exerciciosDisponiveis;
+                    if (local === 'casa') {
+                        exerciciosFiltrados = exerciciosDisponiveis.filter(ex => 
+                            ex.nome.toLowerCase().includes('halteres') || 
+                            ex.nome.toLowerCase().includes('barra') ||
+                            ex.nome.toLowerCase().includes('flexão') ||
+                            ex.nome.toLowerCase().includes('agachamento') ||
+                            ex.nome.toLowerCase().includes('prancha') ||
+                            ex.nome.toLowerCase().includes('abdominal')
+                        );
+                    }
+                    
+                    // Filtra baseado nas limitações
+                    if (limitacoes === 'joelho') {
+                        exerciciosFiltrados = exerciciosFiltrados.filter(ex => 
+                            !ex.nome.toLowerCase().includes('agachamento') &&
+                            !ex.nome.toLowerCase().includes('afundo') &&
+                            !ex.nome.toLowerCase().includes('leg press')
+                        );
+                    }
+                    
+                    if (limitacoes === 'coluna') {
+                        exerciciosFiltrados = exerciciosFiltrados.filter(ex => 
+                            !ex.nome.toLowerCase().includes('stiff') &&
+                            !ex.nome.toLowerCase().includes('good morning') &&
+                            !ex.nome.toLowerCase().includes('levantamento terra')
+                        );
+                    }
+                    
+                    // Se não há exercícios filtrados, usa todos os disponíveis
+                    if (exerciciosFiltrados.length === 0) {
+                        exerciciosFiltrados = exerciciosDisponiveis;
+                    }
+                    
+                    // Seleciona exercícios aleatoriamente
+                    const exerciciosSelecionados = exerciciosFiltrados
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, Math.ceil(numExercicios / gruposMusculares.length));
+                    
+                    exercicios.push(...exerciciosSelecionados);
+                }
+            });
+            
+            // Se não há exercícios, adiciona exercícios padrão
+            if (exercicios.length === 0) {
+                exercicios = [
+                    { nome: "Exercício Padrão", video: "#", series: 3, reps: "10-12", descanso: "60s", grupo: "composto" }
+                ];
+            }
+            
+            return exercicios;
+        }
+        
+        function startQuestionnaire() {
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('questionnaire').classList.remove('hidden');
+        }
+        
+        function selectOption(questionNumber, value, button) {
+            // Remove seleção anterior
+            const currentQuestionDiv = document.getElementById(`question${questionNumber}`);
+            const buttons = currentQuestionDiv.querySelectorAll('.option-button');
+            buttons.forEach(btn => btn.classList.remove('option-selected'));
+            
+            // Adiciona seleção atual
+            button.classList.add('option-selected');
+            answers[questionNumber] = value;
+            
+            // Avança para próxima pergunta após um delay
+            setTimeout(() => {
+                nextQuestion();
+            }, 500);
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < 6) {
+                // Esconde pergunta atual
+                document.getElementById(`question${currentQuestion}`).classList.add('hidden');
+                
+                // Mostra próxima pergunta
+                currentQuestion++;
+                document.getElementById(`question${currentQuestion}`).classList.remove('hidden');
+                
+                // Atualiza barra de progresso
+                updateProgress();
+            } else {
+                // Última pergunta - mostra botão finalizar
+                document.getElementById('finishButton').classList.remove('hidden');
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (currentQuestion / 6) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${currentQuestion} de 6`;
+        }
+        
+        function generateWorkout() {
+            // Simula geração do treino
+            const loadingHTML = `
+                <div class="flex flex-col items-center justify-center py-12">
+                    <div class="w-16 h-16 border-4 border-accent-cyan border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <h3 class="text-lg font-semibold mb-2">Gerando seu treino personalizado...</h3>
+                    <p class="text-gray-400 text-center">Analisando suas respostas e criando o plano perfeito para você.</p>
+                </div>
+            `;
+            
+            document.getElementById('questionnaire').innerHTML = loadingHTML;
+            
+            // Simula tempo de processamento
+            setTimeout(() => {
+                showSuccessMessage();
+            }, 3000);
+        }
+        
+        function showSuccessMessage() {
+            const successHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-accent-cyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-dark-900">
+                            <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Treino criado com sucesso!</h3>
+                    <p class="text-gray-400 mb-4">Seu plano personalizado está pronto.</p>
+                    <button onclick="showWorkoutTable()" class="bg-accent-cyan text-dark-900 font-semibold py-3 px-6 rounded-xl hover:bg-opacity-90 transition-colors">
+                        Ver Meu Treino
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('questionnaire').innerHTML = successHTML;
+        }
+        
+        function showWorkoutTable() {
+            // Esconde o questionário
+            document.getElementById('questionnaire').classList.add('hidden');
+            
+            // Mostra a tabela de treinos
+            document.getElementById('workoutTable').classList.remove('hidden');
+            
+            // Gera treino personalizado
+            const workout = generatePersonalizedWorkout();
+            displayPersonalizedWorkout(workout);
+        }
+        
+        function displayPersonalizedWorkout(workout) {
+            // Armazena o treino globalmente para acesso em outras funções
+            window.currentWorkout = workout;
+            
+            // Atualiza informações do treino
+            updateWorkoutInfo(workout);
+            
+            // Configura o cronograma semanal
+            setupWeeklySchedule(workout);
+            
+            // Mostra a primeira semana por padrão
+            switchWeek(1);
+        }
+        
+        function updateWorkoutInfo(workout) {
+            // Atualiza estatísticas baseado no treino gerado
+            const objetivoText = {
+                'hipertrofia': 'Hipertrofia',
+                'emagrecimento': 'Emagrecimento',
+                'condicionamento': 'Condicionamento',
+                'manutencao': 'Manutenção'
+            };
+            
+            const intensidadeText = workout.intensidade.charAt(0).toUpperCase() + workout.intensidade.slice(1);
+            
+            // Atualiza os elementos da interface
+            const focoElement = document.querySelector('.stat-box:nth-child(3) .font-semibold');
+            const frequenciaElement = document.querySelector('.stat-box:nth-child(4) .font-semibold');
+            const intensidadeElement = document.querySelector('.stat-box:nth-child(2) .font-semibold');
+            const duracaoElement = document.querySelector('.stat-box:nth-child(1) .font-semibold');
+            
+            if (focoElement) focoElement.textContent = objetivoText[workout.objetivo] || 'Hipertrofia';
+            if (frequenciaElement) frequenciaElement.textContent = workout.frequencia === '2-3' ? '2-3x semana' : 
+                                                                   workout.frequencia === '4-5' ? '4-5x semana' : '6x semana';
+            if (intensidadeElement) intensidadeElement.textContent = intensidadeText;
+            if (duracaoElement) duracaoElement.textContent = workout.duracao + ' min';
+        }
+        
+        // Função para configurar o cronograma semanal
+        function setupWeeklySchedule(workout) {
+            const cronograma = workout.cronograma;
+            
+            // Atualiza o número de semanas baseado na frequência
+            updateWeekButtons(cronograma.semanas);
+            
+            // Configura os treinos da primeira semana
+            setupWeekTreinos(1);
+        }
+        
+        // Função para atualizar os botões das semanas
+        function updateWeekButtons(numSemanas) {
+            const semana1 = document.getElementById('semana1');
+            const semana2 = document.getElementById('semana2');
+            const semana3 = document.getElementById('semana3');
+            
+            // Mostra/esconde botões baseado no número de semanas
+            if (semana1) semana1.style.display = numSemanas >= 1 ? 'block' : 'none';
+            if (semana2) semana2.style.display = numSemanas >= 2 ? 'block' : 'none';
+            if (semana3) semana3.style.display = numSemanas >= 3 ? 'block' : 'none';
+        }
+        
+        // Função para configurar os treinos de uma semana
+        function setupWeekTreinos(semana) {
+            const workout = window.currentWorkout;
+            if (!workout || !workout.cronograma || !workout.cronograma.estrutura[semana]) return;
+            
+            const semanaData = workout.cronograma.estrutura[semana];
+            const treinosSemana = document.getElementById('treinosSemana');
+            
+            if (!treinosSemana) return;
+            
+            // Limpa treinos anteriores
+            treinosSemana.innerHTML = '';
+            
+            // Cria abas para cada treino da semana
+            Object.keys(semanaData).forEach((treinoKey, index) => {
+                const treino = semanaData[treinoKey];
+                const treinoTab = document.createElement('button');
+                treinoTab.className = `flex-1 py-3 font-semibold text-sm ${index === 0 ? 'tab-active' : 'text-gray-400'}`;
+                treinoTab.addEventListener('click', (e) => switchTreino(semana, treinoKey, e.currentTarget));
+                treinoTab.textContent = treino.nome.split(' - ')[1]; // Mostra apenas a parte do nome
+                
+                treinosSemana.appendChild(treinoTab);
+            });
+            
+            // Mostra o primeiro treino por padrão
+            if (Object.keys(semanaData).length > 0) {
+                const primeiroTreino = Object.keys(semanaData)[0];
+                displayExercises(semana, primeiroTreino, semanaData[primeiroTreino].exercicios);
+            }
+        }
+        
+        // Função para trocar de semana
+        function switchWeek(semana) {
+            // Remove active de todas as semanas
+            ['semana1', 'semana2', 'semana3'].forEach(semanaId => {
+                const btn = document.getElementById(semanaId);
+                if (btn) {
+                    btn.className = 'py-2 px-3 bg-dark-600 text-gray-400 font-semibold text-sm rounded-lg';
+                }
+            });
+            
+            // Ativa a semana selecionada
+            const semanaBtn = document.getElementById(`semana${semana}`);
+            if (semanaBtn) {
+                semanaBtn.className = 'py-2 px-3 bg-accent-cyan text-dark-900 font-semibold text-sm rounded-lg';
+            }
+            
+            // Configura os treinos da semana
+            setupWeekTreinos(semana);
+        }
+        
+        // Função para trocar de treino dentro da semana
+        function switchTreino(semana, treinoKey, buttonEl) {
+            const workout = window.currentWorkout;
+            if (!workout || !workout.cronograma || !workout.cronograma.estrutura[semana]) return;
+            
+            const semanaData = workout.cronograma.estrutura[semana];
+            const treino = semanaData[treinoKey];
+            
+            // Remove active de todas as abas
+            const treinosSemana = document.getElementById('treinosSemana');
+            if (treinosSemana) {
+                const tabs = treinosSemana.querySelectorAll('button');
+                tabs.forEach(tab => {
+                    tab.className = 'flex-1 py-3 font-semibold text-sm text-gray-400';
+                });
+            }
+            
+            // Ativa a aba selecionada
+            if (buttonEl) {
+                buttonEl.className = 'flex-1 py-3 font-semibold text-sm tab-active';
+            }
+            
+            // Mostra os exercícios do treino
+            displayExercises(semana, treinoKey, treino.exercicios);
+        }
+        
+        function updateWorkoutTabs(workout) {
+            const treinos = Object.keys(workout.treinos);
+            
+            // Esconde todas as abas
+            ['A', 'B', 'C', 'D'].forEach(treino => {
+                const tab = document.getElementById(`treino${treino}`);
+                const exercises = document.getElementById(`exercises${treino}`);
+                if (tab && exercises) {
+                    if (treinos.includes(treino)) {
+                        tab.style.display = 'block';
+                        tab.classList.remove('hidden');
+                    } else {
+                        tab.style.display = 'none';
+                        tab.classList.add('hidden');
+                    }
+                    exercises.classList.add('hidden');
+                }
+            });
+            
+            // Remove active de todas as abas
+            ['A', 'B', 'C', 'D'].forEach(treino => {
+                const tab = document.getElementById(`treino${treino}`);
+                if (tab) {
+                    tab.className = 'flex-1 py-3 font-semibold text-sm text-gray-400';
+                }
+            });
+            
+            // Ativa primeira aba disponível
+            if (treinos.length > 0) {
+                const primeiroTreino = treinos[0];
+                const primeiroTab = document.getElementById(`treino${primeiroTreino}`);
+                if (primeiroTab) {
+                    primeiroTab.className = 'flex-1 py-3 font-semibold text-sm tab-active';
+                }
+            }
+        }
+        
+        function displayExercises(semana, treinoKey, exercicios) {
+            const containerSection = document.getElementById('exercisesContainer');
+            if (!containerSection) return;
+            const listContainer = containerSection.querySelector('.space-y-4');
+            if (!listContainer) return;
+            
+            if (!exercicios || exercicios.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-dark-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                                <line x1="6" x2="6" y1="1" y2="4"/>
+                                <line x1="10" x2="10" y1="1" y2="4"/>
+                                <line x1="14" x2="14" y1="1" y2="4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Nenhum exercício disponível</h3>
+                        <p class="text-gray-400">Tente ajustar as configurações do treino.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Limpa lista
+            listContainer.innerHTML = '';
+            
+            exercicios.forEach((exercicio) => {
+                const card = document.createElement('div');
+                card.className = 'exercise-card bg-dark-800 rounded-xl overflow-hidden shadow-lg';
+                card.innerHTML = `
+                    <div class="h-48 bg-dark-700 flex items-center justify-center relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan opacity-60">
+                            <path d="M18 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M18 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M22 12h-4M6 12h4M12 12h4"/>
+                            <rect width="4" height="6" x="10" y="9" rx="2"/>
+                        </svg>
+                        <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">${exercicio.nome}</h3>
+                            <span class="bg-dark-700 text-accent-cyan text-xs px-2 py-1 rounded-md">${exercicio.series} x ${exercicio.reps}</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-3">Exercício ${exercicio.grupo === 'composto' ? 'composto' : exercicio.grupo === 'isolamento' ? 'de isolamento' : (exercicio.grupo || '')} para desenvolvimento muscular.</p>
+                        <div class="flex items-center text-xs text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Descanso: ${exercicio.descanso}
+                        </div>
+                    </div>`;
+                const playBtn = card.querySelector('button');
+                playBtn.addEventListener('click', () => openVideoCordova(exercicio.video, exercicio.nome));
+                listContainer.appendChild(card);
+            });
+        }
+        
+        function openVideo(videoUrl, exerciseName) {
+            // Verifica se é um vídeo válido
+            if (videoUrl && videoUrl !== '#' && videoUrl.startsWith('http')) {
+                // Extrai o ID do vídeo do YouTube
+                let videoId = '';
+                
+                if (videoUrl.includes('youtu.be/')) {
+                    // Formato: https://youtu.be/VIDEO_ID
+                    videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                } else if (videoUrl.includes('youtube.com/watch?v=')) {
+                    // Formato: https://www.youtube.com/watch?v=VIDEO_ID
+                    videoId = videoUrl.split('v=')[1].split('&')[0];
+                } else if (videoUrl.includes('youtube.com/shorts/')) {
+                    // Formato: https://youtube.com/shorts/VIDEO_ID
+                    videoId = videoUrl.split('shorts/')[1].split('?')[0];
+                }
+                
+                if (videoId) {
+                    // Método 1: Tenta abrir no app nativo do YouTube
+                    try {
+                        if (window.cordova && window.cordova.plugins && window.cordova.plugins.youtube) {
+                            window.cordova.plugins.youtube.openVideo(videoId);
+                            return;
+                        }
+                    } catch (e) {
+                        console.log('Plugin YouTube não disponível');
+                    }
+                    
+                    // Método 2: Tenta abrir com InAppBrowser
+                    try {
+                        if (window.cordova && window.cordova.InAppBrowser) {
+                            const ref = window.cordova.InAppBrowser.open(
+                                `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`,
+                                '_blank',
+                                'location=yes,hidden=no,clearcache=yes,clearsessioncache=yes,zoom=yes'
+                            );
+                        return;
+                        }
+                    } catch (e) {
+                        console.log('InAppBrowser não disponível');
+                    }
+                    
+                    // Método 3: Tenta abrir com Safari View Controller (iOS)
+                    try {
+                        if (window.cordova && window.cordova.plugins && window.cordova.plugins.SafariViewController) {
+                            window.cordova.plugins.SafariViewController.show({
+                                url: `https://www.youtube.com/watch?v=${videoId}`,
+                                hidden: false,
+                                animated: true,
+                                transition: 'slide'
+                            });
+                        return;
+                    }
+                    } catch (e) {
+                        console.log('Safari View Controller não disponível');
+                    }
+                    
+                    // Método 4: Tenta abrir com Chrome Custom Tabs (Android)
+                    try {
+                        if (window.cordova && window.cordova.plugins && window.cordova.plugins.ChromeTabs) {
+                            window.cordova.plugins.ChromeTabs.openUrl(`https://www.youtube.com/watch?v=${videoId}`);
+                            return;
+                        }
+                    } catch (e) {
+                        console.log('Chrome Custom Tabs não disponível');
+                    }
+                    
+                    // Método 5: Fallback - abre no navegador padrão do sistema
+                    try {
+                        if (window.cordova) {
+                            // Cordova: abre no navegador externo
+                            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_system');
+                    } else {
+                            // Web: abre em nova aba
+                            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+                        }
+                    } catch (e) {
+                        // Último recurso: tenta abrir diretamente
+                        window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+                    }
+                    
+                        } else {
+                    alert(`URL do vídeo inválida para: ${exerciseName}`);
+                }
+            } else {
+                // Mostra mensagem se não há vídeo disponível
+                alert(`Vídeo não disponível para: ${exerciseName}`);
+            }
+        }
+        
+        function switchEnvironment(environment) {
+            const academiaBtn = document.getElementById('academiaBtn');
+            const casaBtn = document.getElementById('casaBtn');
+            
+            if (environment === 'academia') {
+                academiaBtn.className = 'flex-1 py-3 bg-accent-cyan font-semibold text-sm';
+                casaBtn.className = 'flex-1 py-3 bg-dark-600 font-semibold text-sm text-gray-400';
+            } else {
+                academiaBtn.className = 'flex-1 py-3 bg-dark-600 font-semibold text-sm text-gray-400';
+                casaBtn.className = 'flex-1 py-3 bg-accent-cyan font-semibold text-sm';
+            }
+            
+            // Atualiza o ambiente no treino atual se existir
+            if (window.currentWorkout) {
+                window.currentWorkout.local = environment;
+                // Regera o cronograma completo com base no novo ambiente
+                const novoCronograma = generateWeeklySchedule(
+                    window.currentWorkout.frequencia,
+                    window.currentWorkout.objetivo,
+                    environment,
+                    window.currentWorkout.limitacoes
+                );
+                window.currentWorkout.cronograma = novoCronograma;
+                // Reconfigura a semana e treinos exibidos
+                setupWeeklySchedule(window.currentWorkout);
+                switchWeek(1);
+            }
+        }
+        
+        function switchTab(tab) {
+            // Remove active de todas as abas
+            ['A', 'B', 'C', 'D'].forEach(treino => {
+                const tabElement = document.getElementById(`treino${treino}`);
+                if (tabElement) {
+                    tabElement.className = 'flex-1 py-3 font-semibold text-sm text-gray-400';
+                }
+            });
+            
+            // Esconde todos os exercícios
+            ['A', 'B', 'C', 'D'].forEach(treino => {
+                const exercises = document.getElementById(`exercises${treino}`);
+                if (exercises) {
+                    exercises.classList.add('hidden');
+                }
+            });
+            
+            // Ativa a aba selecionada
+            const activeTab = document.getElementById(`treino${tab}`);
+            if (activeTab) {
+                activeTab.className = 'flex-1 py-3 font-semibold text-sm tab-active';
+            }
+            
+            const activeExercises = document.getElementById(`exercises${tab}`);
+            if (activeExercises) {
+                activeExercises.classList.remove('hidden');
+            }
+            
+            // Se o treino foi gerado, mostra os exercícios correspondentes
+            if (window.currentWorkout && window.currentWorkout.treinos[tab]) {
+                displayExercises(tab, window.currentWorkout.treinos[tab].exercicios);
+            }
+        }
+        
+        // Função alternativa para abrir vídeos no Cordova
+        function openVideoCordova(videoUrl, exerciseName) {
+            if (!videoUrl || videoUrl === '#' || !videoUrl.startsWith('http')) {
+                alert(`Vídeo não disponível para: ${exerciseName}`);
+                return;
+            }
+            
+            // Extrai o ID do vídeo
+            let videoId = '';
+            if (videoUrl.includes('youtu.be/')) {
+                videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+            } else if (videoUrl.includes('youtube.com/watch?v=')) {
+                videoId = videoUrl.split('v=')[1].split('&')[0];
+            } else if (videoUrl.includes('youtube.com/shorts/')) {
+                videoId = videoUrl.split('shorts/')[1].split('?')[0];
+            }
+            
+            if (!videoId) {
+                alert(`URL do vídeo inválida para: ${exerciseName}`);
+                return;
+            }
+            
+            // Tenta diferentes métodos para abrir o vídeo
+            const methods = [
+                // Método 1: Plugin nativo do YouTube
+                () => {
+                    if (window.cordova && window.cordova.plugins && window.cordova.plugins.youtube) {
+                        window.cordova.plugins.youtube.openVideo(videoId);
+                        return true;
+                    }
+                    return false;
+                },
+                
+                // Método 2: InAppBrowser
+                () => {
+                    if (window.cordova && window.cordova.InAppBrowser) {
+                        window.cordova.InAppBrowser.open(
+                            `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`,
+                            '_blank',
+                            'location=yes,hidden=no,clearcache=yes,clearsessioncache=yes,zoom=yes'
+                        );
+                        return true;
+                    }
+                    return false;
+                },
+                
+                // Método 3: Safari View Controller (iOS)
+                () => {
+                    if (window.cordova && window.cordova.plugins && window.cordova.plugins.SafariViewController) {
+                        window.cordova.plugins.SafariViewController.show({
+                            url: `https://www.youtube.com/watch?v=${videoId}`,
+                            hidden: false,
+                            animated: true,
+                            transition: 'slide'
+                        });
+                        return true;
+                    }
+                    return false;
+                },
+                
+                // Método 4: Chrome Custom Tabs (Android)
+                () => {
+                    if (window.cordova && window.cordova.plugins && window.cordova.plugins.ChromeTabs) {
+                        window.cordova.plugins.ChromeTabs.openUrl(`https://www.youtube.com/watch?v=${videoId}`);
+                        return true;
+                    }
+                    return false;
+                },
+                
+                // Método 5: Navegador externo do sistema
+                () => {
+                    if (window.cordova) {
+                        window.open(`https://www.youtube.com/watch?v=${videoId}`, '_system');
+                        return true;
+                    }
+                    return false;
+                },
+                
+                // Método 6: Fallback para web
+                () => {
+                    window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+                    return true;
+                }
+            ];
+            
+            // Tenta cada método até um funcionar
+            for (let method of methods) {
+                try {
+                    if (method()) {
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Método falhou:', e);
+                    continue;
+                }
+            }
+            
+            // Se todos falharem, tenta abrir diretamente
+            try {
+                window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+            } catch (e) {
+                alert(`Erro ao abrir vídeo: ${exerciseName}`);
+            }
+        }
+        
+        // Inicializar os ícones Lucide
+        lucide.createIcons();
+    </script>
+    
+    <!-- Framework7 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+    
+    <script>
+        // Adicionar evento de clique para os links da toolbar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.toolbar-inner a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

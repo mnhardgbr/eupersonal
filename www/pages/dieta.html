@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0e1624" />
+  <title>Dieta - Eu Personal</title>
+  
+  <!-- Framework7 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css" />
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="stylesheet" href="../css/link2.css" />
+</head>
+<body>
+  <div id="app">
+    <div class="view view-main view-init tab tab-active" data-url="/dieta/">
+      <div class="page" data-name="dieta">
+        <!-- Navbar -->
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="../pages/home.html" class="link">
+                <i class="ri-arrow-left-s-line" style="font-size: 24px; color: white;"></i>
+                <span style="color: white; margin-left: 5px;">Voltar</span>
+              </a>
+            </div>
+            <div class="title">Plano Alimentar</div>
+          </div>
+        </div>
+
+        <!-- Conteúdo da Página -->
+        <div class="page-content">
+          <!-- Logo -->
+          <div class="logo-container">
+            <img src="../img/logo.png" alt="Eu Personal" class="logo-eupersonal" />
+          </div>
+
+          <!-- Meta Diária -->
+          <div class="card-meta">
+            <h3>Meta Diária</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <span>Calorias</span>
+              <span>1300/2000 kcal</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 65%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0 5px;">
+              <span>Proteína</span>
+              <span>112/150g</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 75%;"></div>
+            </div>
+          </div>
+
+          <!-- Controle de Água -->
+          <div class="agua-box">
+            <div style="display: flex; align-items: center;">
+              <i class="ri-water-flash-line" style="font-size: 24px; margin-right: 10px; color: #4da6ff;"></i>
+              <span>Água: 2L/3L</span>
+            </div>
+            <div style="display: flex; gap: 15px;">
+              <i class="ri-subtract-line" style="font-size: 24px; cursor: pointer;"></i>
+              <i class="ri-add-line" style="font-size: 24px; cursor: pointer;"></i>
+            </div>
+          </div>
+
+          <!-- Refeições -->
+          <div class="refeicoes-box">
+            <h3>Refeições do Dia</h3>
+            
+            <div class="food-item">
+              <div style="display: flex; align-items: center;">
+                <i class="ri-sun-line" style="margin-right: 10px; color: #4da6ff;"></i>
+                <span>Café da Manhã</span>
+              </div>
+              <div class="item-after">07:00</div>
+              <i class="ri-edit-line edit-btn"></i>
+            </div>
+
+            <div class="food-item">
+              <div style="display: flex; align-items: center;">
+                <i class="ri-cup-line" style="margin-right: 10px; color: #4da6ff;"></i>
+                <span>Lanche da Manhã</span>
+              </div>
+              <div class="item-after">10:00</div>
+              <i class="ri-edit-line edit-btn"></i>
+            </div>
+
+            <div class="food-item">
+              <div style="display: flex; align-items: center;">
+                <i class="ri-restaurant-line" style="margin-right: 10px; color: #4da6ff;"></i>
+                <span>Almoço</span>
+              </div>
+              <div class="item-after">12:30</div>
+              <i class="ri-edit-line edit-btn"></i>
+            </div>
+
+            <div class="food-item">
+              <div style="display: flex; align-items: center;">
+                <i class="ri-cup-line" style="margin-right: 10px; color: #4da6ff;"></i>
+                <span>Lanche da Tarde</span>
+              </div>
+              <div class="item-after">15:30</div>
+              <i class="ri-edit-line edit-btn"></i>
+            </div>
+
+            <div class="food-item">
+              <div style="display: flex; align-items: center;">
+                <i class="ri-moon-line" style="margin-right: 10px; color: #4da6ff;"></i>
+                <span>Jantar</span>
+              </div>
+              <div class="item-after">19:00</div>
+              <i class="ri-edit-line edit-btn"></i>
+            </div>
+
+            <button class="add-btn" id="btnAddRefeicao">
+              <i class="ri-add-line"></i> Adicionar Refeição
+            </button>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar toolbar-bottom tabbar">
+          <div class="toolbar-inner">
+            <a href="home.html" class="tab-link">
+              <i class="ri-home-4-line"></i>
+              <span>Início</span>
+            </a>
+            <a href="dieta.html" class="tab-link tab-link-active">
+              <i class="ri-restaurant-line"></i>
+              <span>Dieta</span>
+            </a>
+            <a href="treinos.html" class="tab-link">
+              <i class="ri-barbell-line"></i>
+              <span>Treino</span>
+            </a>
+            <a href="perfil.html" class="tab-link">
+              <i class="ri-user-line"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Adicionar evento de clique para os links da toolbar e botão voltar
+      document.querySelectorAll('.toolbar-inner a, .link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.location.href = this.getAttribute('href');
+        });
+      });
+
+      // Adicionar eventos para os botões de água
+      const addWater = document.querySelector('.ri-add-line');
+      const removeWater = document.querySelector('.ri-subtract-line');
+      
+      if (addWater && removeWater) {
+        addWater.addEventListener('click', function() {
+          // Implementar lógica para adicionar água
+          console.log('Adicionar água');
+        });
+        
+        removeWater.addEventListener('click', function() {
+          // Implementar lógica para remover água
+          console.log('Remover água');
+        });
+      }
+    });
+  </script>
+
+  <!-- Modal de Edição/Adição de Refeição -->
+  <div id="modalRefeicao" style="display:none;">
+    <div class="modal-content">
+      <button class="close-modal" type="button" id="btnFecharModal">&times;</button>
+      <h3 id="modalTitulo">Adicionar Refeição</h3>
+      <form id="formRefeicao">
+        <input type="hidden" id="refeicaoIndex" />
+        <div style="margin-bottom:12px;">
+          <label for="nomeRefeicao">Nome</label>
+          <input type="text" id="nomeRefeicao" name="nome" required />
+        </div>
+        <div style="margin-bottom:12px;">
+          <label for="horarioRefeicao">Horário</label>
+          <input type="time" id="horarioRefeicao" name="horario" required />
+        </div>
+        <div style="margin-bottom:12px;">
+          <label for="descricaoRefeicao">Descrição</label>
+          <textarea id="descricaoRefeicao" name="descricao" rows="2"></textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" id="cancelarRefeicao">Cancelar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html> 

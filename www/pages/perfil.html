@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0e1624" />
+  <title>Perfil - Eu Personal</title>
+  
+  <!-- Framework7 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.css" />
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="../css/index.css" />
+  <style>
+    /* Esconder barra de rolagem */
+    .page-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .page-content {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 80px;
+    }
+
+    .card-info {
+      background-color: #1e2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .card-info h2 {
+      color: #00d4ff;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .info-value {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .atualizar-btn {
+      display: inline-block;
+      width: calc(100% - 32px);
+      padding: 12px 20px;
+      background: #ff3b30;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      margin: 16px;
+      text-align: center;
+    }
+
+    .atualizar-btn i {
+      margin-right: 8px;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .logo-eupersonal {
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="view view-main view-init tab tab-active" data-url="/perfil/">
+      <div class="page" data-name="perfil">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="home.html" class="link back">
+                <i class="ri-arrow-left-line"></i>
+              </a>
+            </div>
+            <div class="title">Meu Perfil</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="logo-container">
+            <img src="../img/logo.png" alt="Eu Personal" class="logo-eupersonal" />
+          </div>
+
+          <!-- Dados Pessoais -->
+          <div class="card-info">
+            <h2>Seus Dados</h2>
+            <div class="info-item">
+              <span class="info-label">Nome</span>
+              <span class="info-value" id="nome"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Idade</span>
+              <span class="info-value"><span id="idade"></span> anos</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Peso</span>
+              <span class="info-value"><span id="peso"></span> kg</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Nível</span>
+              <span class="info-value" id="nivel"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Objetivo</span>
+              <span class="info-value" id="objetivo"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Frequência</span>
+              <span class="info-value" id="frequencia"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">FC Máxima</span>
+              <span class="info-value"><span id="fc_maxima"></span> bpm</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">FC Repouso</span>
+              <span class="info-value"><span id="fc_repouso"></span> bpm</span>
+            </div>
+          </div>
+
+          <!-- Botão Atualizar -->
+          <a href="periodizacao.html" class="atualizar-btn">
+            <i class="ri-edit-2-line"></i>
+            Atualizar Dados
+          </a>
+        </div>
+
+        <div class="toolbar toolbar-bottom tabbar">
+          <div class="toolbar-inner">
+            <a href="home.html" class="tab-link">
+              <i class="ri-home-4-line"></i>
+              <span>Início</span>
+            </a>
+            <a href="dieta.html" class="tab-link">
+              <i class="ri-restaurant-line"></i>
+              <span>Dieta</span>
+            </a>
+            <a href="treinos.html" class="tab-link">
+              <i class="ri-barbell-line"></i>
+              <span>Treino</span>
+            </a>
+            <a href="perfil.html" class="tab-link tab-link-active">
+              <i class="ri-user-line"></i>
+              <span>Perfil</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/framework7@7/framework7-bundle.min.js"></script>
+  <script type="module" src="../js/app.js"></script>
+  
+  <script>
+    app.on('pageInit', function (page) {
+      if (page.name === 'perfil') {
+        // Carregar dados do usuário
+        const dadosSalvos = localStorage.getItem('dadosPeriodizacao');
+        if (dadosSalvos) {
+          const dados = JSON.parse(dadosSalvos);
+          
+          // Preencher dados do usuário
+          page.$el.find('#nome').text(dados.nome || 'Não informado');
+          page.$el.find('#idade').text(dados.idade || 'Não informado');
+          page.$el.find('#peso').text(dados.peso || 'Não informado');
+          page.$el.find('#nivel').text(dados.nivel || 'Não informado');
+          page.$el.find('#objetivo').text(dados.objetivo || 'Não informado');
+          page.$el.find('#frequencia').text(dados.frequencia || 'Não informado');
+          page.$el.find('#fc_maxima').text(dados.fcMaxima || 'Não informado');
+          page.$el.find('#fc_repouso').text(dados.fc_repouso || 'Não informado');
+        }
+      }
+    });
+  </script>
+</body>
+</html> 

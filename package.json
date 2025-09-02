@@ -1,0 +1,37 @@
+{
+  "name": "br.com.eupersonaloficial",
+  "displayName": "Eu Personal",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "cordova-android": "^13.0.0",
+    "cordova-plugin-compat": "^1.2.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-safariviewcontroller": {},
+      "cordova-plugin-browsertab": {},
+      "cordova-plugin-youtube-video-player": {}
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.10",
+    "cordova-plugin-browsertab": "0.2.0",
+    "cordova-plugin-inappbrowser": "6.0.0",
+    "cordova-plugin-safariviewcontroller": "2.0.0",
+    "cordova-plugin-youtube-video-player": "2.4.0"
+  }
+}
