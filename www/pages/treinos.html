@@ -93,10 +93,30 @@
                 transform: translateY(0);
             }
         }
+        
+        /* Permitir scroll na página */
+        body {
+            overflow-y: auto;
+            height: auto;
+            min-height: 100vh;
+        }
+        
+        /* Container principal com scroll */
+        .main-container {
+            min-height: 100vh;
+            overflow-y: auto;
+            padding-bottom: 80px; /* Espaço para o menu inferior */
+        }
+        
+        /* Garantir que o conteúdo seja scrollável */
+        .content-scrollable {
+            overflow-y: auto;
+            height: auto;
+        }
     </style>
 </head>
-<body class="bg-dark-900 text-white min-h-screen">
-    <div class="max-w-md mx-auto pb-20">
+<body class="bg-dark-900 text-white">
+    <div class="main-container max-w-md mx-auto content-scrollable">
         <!-- Cabeçalho -->
         <header class="bg-dark-800 p-4 flex items-center sticky top-0 z-10 shadow-lg">
             <button onclick="window.location.href='home.html'" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-dark-700 transition-colors">
