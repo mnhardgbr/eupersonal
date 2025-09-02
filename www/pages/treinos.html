@@ -422,7 +422,7 @@
                     </svg>
                     Atualizar Dados
                 </button>
-                <button class="flex-1 bg-accent-cyan rounded-lg py-3 font-medium flex items-center justify-center hover:bg-opacity-90 transition-colors">
+                <button onclick="generateSampleWorkout()" class="flex-1 bg-accent-cyan rounded-lg py-3 font-medium flex items-center justify-center hover:bg-opacity-90 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                         <path d="M21 2v6h-6"/>
                         <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
@@ -1540,8 +1540,46 @@
             }
         }
         
+        // Função para gerar treino de exemplo
+        function generateSampleWorkout() {
+            // Simula respostas do questionário
+            const sampleAnswers = {
+                1: 'hipertrofia',
+                2: 'intermediario',
+                3: '2-3',
+                4: '45-60',
+                5: 'academia',
+                6: 'nenhuma'
+            };
+            
+            // Gera o treino personalizado
+            const workout = generatePersonalizedWorkout(sampleAnswers);
+            
+            // Exibe o treino
+            displayPersonalizedWorkout(workout);
+            
+            // Atualiza as informações do treino
+            updateWorkoutInfo(workout);
+            
+            // Configura o cronograma semanal
+            setupWeeklySchedule(workout);
+        }
+        
+        // Função para carregar treino automaticamente
+        function loadSampleWorkoutOnLoad() {
+            // Aguarda um pouco para garantir que tudo carregou
+            setTimeout(() => {
+                generateSampleWorkout();
+            }, 500);
+        }
+        
         // Inicializar os ícones Lucide
         lucide.createIcons();
+        
+        // Carregar treino de exemplo quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleWorkoutOnLoad();
+        });
     </script>
     
     <!-- Framework7 JS -->
