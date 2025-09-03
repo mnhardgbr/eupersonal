@@ -133,11 +133,8 @@
             <div class="flex justify-center mb-6 mt-8">
                 <div class="w-32 h-32 bg-dark-800 rounded-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan opacity-60">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-                        <line x1="6" x2="6" y1="1" y2="4"/>
-                        <line x1="10" x2="10" y1="1" y2="4"/>
-                        <line x1="14" x2="14" y1="1" y2="4"/>
+                        <path d="M18 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M18 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M22 12h-4M6 12h4M12 12h4"/>
+                        <rect width="4" height="6" x="10" y="9" rx="2"/>
                     </svg>
                         </div>
                         </div>
@@ -362,6 +359,16 @@
                                 <polyline points="12 6 12 12 16 14"/>
                             </svg>
                             <span class="font-semibold">45 min</span>
+        </div>
+    </div>
+
+    <!-- Modal de Vídeo Embutido -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-80 hidden flex items-center justify-center z-50" onclick="if(event.target===this) closeVideoModal()">
+        <div class="relative w-full max-w-2xl aspect-video mx-4">
+            <button id="videoCloseBtn" aria-label="Fechar vídeo" onclick="closeVideoModal()" class="absolute -top-12 right-0 text-white bg-dark-700 hover:bg-dark-600 px-4 py-2 rounded">
+                Fechar
+            </button>
+            <iframe id="videoIframe" class="w-full h-full rounded-lg" src="" title="Vídeo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -778,36 +785,36 @@
                             treino1: {
                                 nome: "Treino A - Peito e Tríceps",
                                 grupos: ['peito', 'triceps'],
-                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino B - Costas e Bíceps",
                                 grupos: ['costas', 'biceps'],
-                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 6)
                             }
                         },
                         2: { // Semana 2
                             treino1: {
                                 nome: "Treino C - Pernas e Ombros",
                                 grupos: ['pernas', 'ombros'],
-                                exercicios: generateExercises(['pernas', 'ombros'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['pernas', 'ombros'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino D - Abdômen e Cardio",
                                 grupos: ['abdominal'],
-                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 3)
+                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 5)
                             }
                         },
                         3: { // Semana 3
                             treino1: {
                                 nome: "Treino E - Full Body",
                                 grupos: ['peito', 'costas', 'pernas'],
-                                exercicios: generateExercises(['peito', 'costas', 'pernas'], objetivo, local, limitacoes, 3)
+                                exercicios: generateExercises(['peito', 'costas', 'pernas'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino F - Isolamento",
                                 grupos: ['biceps', 'triceps', 'ombros'],
-                                exercicios: generateExercises(['biceps', 'triceps', 'ombros'], objetivo, local, limitacoes, 3)
+                                exercicios: generateExercises(['biceps', 'triceps', 'ombros'], objetivo, local, limitacoes, 6)
                             }
                         }
                     }
@@ -822,44 +829,44 @@
                             treino1: {
                                 nome: "Treino A - Peito e Tríceps",
                                 grupos: ['peito', 'triceps'],
-                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['peito', 'triceps'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino B - Costas e Bíceps",
                                 grupos: ['costas', 'biceps'],
-                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['costas', 'biceps'], objetivo, local, limitacoes, 6)
                             },
                             treino3: {
                                 nome: "Treino C - Pernas",
                                 grupos: ['pernas'],
-                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 6)
                             },
                             treino4: {
                                 nome: "Treino D - Ombros e Abdômen",
                                 grupos: ['ombros', 'abdominal'],
-                                exercicios: generateExercises(['ombros', 'abdominal'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['ombros', 'abdominal'], objetivo, local, limitacoes, 6)
                             }
                         },
                         2: { // Semana 2
                             treino1: {
                                 nome: "Treino E - Peito e Ombros",
                                 grupos: ['peito', 'ombros'],
-                                exercicios: generateExercises(['peito', 'ombros'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['peito', 'ombros'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino F - Costas e Abdômen",
                                 grupos: ['costas', 'abdominal'],
-                                exercicios: generateExercises(['costas', 'abdominal'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['costas', 'abdominal'], objetivo, local, limitacoes, 6)
                             },
                             treino3: {
                                 nome: "Treino G - Pernas e Glúteos",
                                 grupos: ['pernas'],
-                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 6)
                             },
                             treino4: {
                                 nome: "Treino H - Bíceps e Tríceps",
                                 grupos: ['biceps', 'triceps'],
-                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 6)
                             }
                         }
                     }
@@ -874,32 +881,32 @@
                             treino1: {
                                 nome: "Treino A - Peito",
                                 grupos: ['peito'],
-                                exercicios: generateExercises(['peito'], objetivo, local, limitacoes, 5)
+                                exercicios: generateExercises(['peito'], objetivo, local, limitacoes, 6)
                             },
                             treino2: {
                                 nome: "Treino B - Costas",
                                 grupos: ['costas'],
-                                exercicios: generateExercises(['costas'], objetivo, local, limitacoes, 5)
+                                exercicios: generateExercises(['costas'], objetivo, local, limitacoes, 6)
                             },
                             treino3: {
                                 nome: "Treino C - Pernas",
                                 grupos: ['pernas'],
-                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 5)
+                                exercicios: generateExercises(['pernas'], objetivo, local, limitacoes, 6)
                             },
                             treino4: {
                                 nome: "Treino D - Ombros",
                                 grupos: ['ombros'],
-                                exercicios: generateExercises(['ombros'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['ombros'], objetivo, local, limitacoes, 6)
                             },
                             treino5: {
                                 nome: "Treino E - Bíceps e Tríceps",
                                 grupos: ['biceps', 'triceps'],
-                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['biceps', 'triceps'], objetivo, local, limitacoes, 6)
                             },
                             treino6: {
                                 nome: "Treino F - Abdômen e Cardio",
                                 grupos: ['abdominal'],
-                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 4)
+                                exercicios: generateExercises(['abdominal'], objetivo, local, limitacoes, 5)
                             }
                         }
                     }
@@ -920,14 +927,7 @@
                     // Filtra exercícios baseado no local de treino
                     let exerciciosFiltrados = exerciciosDisponiveis;
                     if (local === 'casa') {
-                        exerciciosFiltrados = exerciciosDisponiveis.filter(ex => 
-                            ex.nome.toLowerCase().includes('halteres') || 
-                            ex.nome.toLowerCase().includes('barra') ||
-                            ex.nome.toLowerCase().includes('flexão') ||
-                            ex.nome.toLowerCase().includes('agachamento') ||
-                            ex.nome.toLowerCase().includes('prancha') ||
-                            ex.nome.toLowerCase().includes('abdominal')
-                        );
+                        exerciciosFiltrados = exerciciosDisponiveis.filter(ex => isHomeBodyweight(ex.nome));
                     }
                     
                     // Filtra baseado nas limitações
@@ -947,15 +947,24 @@
                         );
                     }
                     
-                    // Se não há exercícios filtrados, usa todos os disponíveis
+                    // Determina quantos exercícios precisamos deste grupo
+                    const qtdPorGrupo = Math.ceil(numExercicios / gruposMusculares.length);
+                    
+                    // Se estamos em casa e a lista ficou curta, completa com fallback de corpo livre por grupo
+                    if (local === 'casa' && exerciciosFiltrados.length < qtdPorGrupo) {
+                        const fallbacks = getHomeExercises(grupo);
+                        // Evita duplicados pelo nome
+                        const nomesAtuais = new Set(exerciciosFiltrados.map(e => e.nome));
+                        fallbacks.forEach(fb => { if (!nomesAtuais.has(fb.nome)) exerciciosFiltrados.push(fb); });
+                    }
+                    
+                    // Se mesmo assim ficou vazio, usa todos disponíveis
                     if (exerciciosFiltrados.length === 0) {
                         exerciciosFiltrados = exerciciosDisponiveis;
                     }
                     
-                    // Seleciona exercícios aleatoriamente
-                    const exerciciosSelecionados = exerciciosFiltrados
-                        .sort(() => 0.5 - Math.random())
-                        .slice(0, Math.ceil(numExercicios / gruposMusculares.length));
+                    // Seleção determinística (sem aleatoriedade): pega os primeiros qtdPorGrupo
+                    const exerciciosSelecionados = exerciciosFiltrados.slice(0, qtdPorGrupo);
                     
                     exercicios.push(...exerciciosSelecionados);
                 }
@@ -969,6 +978,43 @@
             }
             
             return exercicios;
+        }
+
+        // Fallback de exercícios para treinar em casa por grupo (sem aparelhos)
+        function getHomeExercises(grupo) {
+            const map = {
+                peito: [
+                    { nome: 'Flexão de Braço', video: 'https://youtu.be/RNWiy0kp40k', series: 4, reps: '10-15', descanso: '60s', grupo: 'composto' },
+                    { nome: 'Flexão Diamante', video: 'https://youtu.be/VCm0l2QF8Y8', series: 3, reps: '8-12', descanso: '60s', grupo: 'isolamento' },
+                    { nome: 'Flexão Decline (pés elevados)', video: 'https://youtu.be/3A9r7g3yZ1U', series: 3, reps: '8-12', descanso: '60s', grupo: 'composto' }
+                ],
+                triceps: [
+                    { nome: 'Tríceps no Banco (cadeira)', video: 'https://youtu.be/XXvuYGCxpkk', series: 3, reps: '10-15', descanso: '60s', grupo: 'isolamento' },
+                    { nome: 'Mergulho entre bancos', video: 'https://youtu.be/aK8HttG5QnA', series: 3, reps: '8-12', descanso: '60s', grupo: 'composto' }
+                ],
+                costas: [
+                    { nome: 'Superman', video: 'https://youtu.be/z6PJMT2y8GQ', series: 3, reps: '12-15', descanso: '45s', grupo: 'isolamento' },
+                    { nome: 'Prancha com Remada Isométrica', video: 'https://youtu.be/0rZ2P3sZqSg', series: 3, reps: '30-45s', descanso: '45s', grupo: 'isometria' }
+                ],
+                biceps: [
+                    { nome: 'Isometria de Flexão (ênfase bíceps)', video: 'https://youtu.be/2tT2YFZV6d8', series: 3, reps: '20-30s', descanso: '45s', grupo: 'isometria' }
+                ],
+                ombros: [
+                    { nome: 'Flexão Pike (ombros)', video: 'https://youtu.be/0PkT0F7n2Lw', series: 3, reps: '8-12', descanso: '60s', grupo: 'composto' },
+                    { nome: 'Elevação Lateral Isométrica (sem peso)', video: 'https://youtu.be/1w7OgIMMRc4', series: 3, reps: '20-30s', descanso: '45s', grupo: 'isometria' }
+                ],
+                pernas: [
+                    { nome: 'Agachamento Livre', video: 'https://youtu.be/WLw3eRGkM5U', series: 4, reps: '12-20', descanso: '60s', grupo: 'composto' },
+                    { nome: 'Avanço (Afundo) Alternado', video: 'https://youtu.be/6SHmjfEAwe0', series: 3, reps: '10-15', descanso: '60s', grupo: 'composto' },
+                    { nome: 'Panturrilha em Pé', video: 'https://youtu.be/G6Gq1Wm3r2I', series: 3, reps: '15-20', descanso: '45s', grupo: 'isolamento' }
+                ],
+                abdominal: [
+                    { nome: 'Abdominal Supra', video: 'https://youtu.be/mfkfUkj24co', series: 3, reps: '15-20', descanso: '45s', grupo: 'isolamento' },
+                    { nome: 'Prancha Frontal', video: 'https://youtu.be/a6JT9hOy5Rs', series: 3, reps: '30-45s', descanso: '45s', grupo: 'isometria' },
+                    { nome: 'Bicicleta no Chão', video: 'https://youtu.be/9FGilxCbdz8', series: 3, reps: '20-30', descanso: '45s', grupo: 'isolamento' }
+                ]
+            };
+            return map[grupo] || [];
         }
         
         function startQuestionnaire() {
@@ -1067,6 +1113,11 @@
         function displayPersonalizedWorkout(workout) {
             // Armazena o treino globalmente para acesso em outras funções
             window.currentWorkout = workout;
+            
+            // Salva uma cópia base do cronograma gerado para alternar ambientes sem re-sortear
+            if (!workout.originalCronograma) {
+                workout.originalCronograma = deepClone(workout.cronograma);
+            }
             
             // Atualiza informações do treino
             updateWorkoutInfo(workout);
@@ -1245,6 +1296,31 @@
             const listContainer = containerSection.querySelector('.space-y-4');
             if (!listContainer) return;
             
+            // Adapta para casa no momento da renderização, preservando a estrutura
+            if (window.currentWorkout && window.currentWorkout.local === 'casa') {
+                try {
+                    const cronograma = window.currentWorkout.cronograma;
+                    const semanaData = cronograma && cronograma.estrutura && cronograma.estrutura[semana];
+                    const treino = semanaData && semanaData[treinoKey];
+                    const grupos = (treino && treino.grupos) || [];
+                    const tamanho = Array.isArray(exercicios) ? exercicios.length : 0;
+                    // Monta um pool com os fallbacks de cada grupo
+                    let pool = grupos.flatMap(g => getHomeExercises(g));
+                    // Pool genérico caso falte itens
+                    const genericos = [
+                        { nome: 'Flexão de Braço', video: 'https://youtu.be/RNWiy0kp40k', series: 4, reps: '10-15', descanso: '60s', grupo: 'composto' },
+                        { nome: 'Agachamento Livre', video: 'https://youtu.be/WLw3eRGkM5U', series: 4, reps: '12-20', descanso: '60s', grupo: 'composto' },
+                        { nome: 'Tríceps no Banco', video: 'https://youtu.be/XXvuYGCxpkk', series: 3, reps: '10-15', descanso: '60s', grupo: 'isolamento' },
+                        { nome: 'Prancha Frontal', video: 'https://youtu.be/a6JT9hOy5Rs', series: 3, reps: '30-45s', descanso: '45s', grupo: 'isometria' },
+                        { nome: 'Bicicleta no Chão', video: 'https://youtu.be/9FGilxCbdz8', series: 3, reps: '20-30', descanso: '45s', grupo: 'isolamento' },
+                        { nome: 'Burpee', video: 'https://youtu.be/1u6zjC2QUL8', series: 3, reps: '10-15', descanso: '60s', grupo: 'composto' }
+                    ];
+                    if (pool.length < tamanho) pool = pool.concat(genericos);
+                    // Reconstrói a lista com o tamanho original
+                    exercicios = pool.slice(0, Math.max(tamanho, 0));
+                } catch (e) { /* ignora e usa lista original */ }
+            }
+            
             if (!exercicios || exercicios.length === 0) {
                 listContainer.innerHTML = `
                     <div class="text-center py-8">
@@ -1270,17 +1346,41 @@
             exercicios.forEach((exercicio) => {
                 const card = document.createElement('div');
                 card.className = 'exercise-card bg-dark-800 rounded-xl overflow-hidden shadow-lg';
+                const thumbs = getYoutubeThumbs(exercicio.video);
+                const videoThumbMax = thumbs.maxres;
+                const videoThumbHq = thumbs.hq;
+                const hasThumb = !!videoThumbHq;
                 card.innerHTML = `
-                    <div class="h-48 bg-dark-700 flex items-center justify-center relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan opacity-60">
-                            <path d="M18 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M18 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M22 12h-4M6 12h4M12 12h4"/>
-                            <rect width="4" height="6" x="10" y="9" rx="2"/>
-                        </svg>
-                        <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-                                <polygon points="5 3 19 12 5 21 5 3"/>
-                            </svg>
-                        </button>
+                    <div class="h-48 bg-dark-700 flex items-center justify-center relative overflow-hidden">
+                        ${hasThumb ? 
+                            `<img src="${videoThumbMax}" srcset="${videoThumbHq} 480w, ${videoThumbMax} 1280w" sizes="(max-width: 768px) 100vw, 480px" alt="${exercicio.nome}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" loading="lazy" onerror="if(this.src.indexOf('maxres')>-1){this.src='${videoThumbHq}'}">
+                             <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-dark-700 to-dark-800" data-skeleton></div>
+                             <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 md:bg-opacity-0 hover:bg-opacity-40 transition-opacity" aria-label="Reproduzir ${exercicio.nome}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white drop-shadow">
+                                     <polygon points="5 3 19 12 5 21 5 3"/>
+                                 </svg>
+                             </button>
+                             <div class="pointer-events-none absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/70 to-transparent">
+                                 <div class="flex items-center justify-between">
+                                     <h4 class="font-semibold text-sm md:text-base">${exercicio.nome}</h4>
+                                     <div class="flex gap-2">
+                                         <span class="text-[10px] md:text-xs bg-dark-900/70 border border-dark-600 px-2 py-0.5 rounded-md">${exercicio.series}×${exercicio.reps}</span>
+                                         <span class="text-[10px] md:text-xs bg-dark-900/70 border border-dark-600 px-2 py-0.5 rounded-md">${exercicio.descanso}</span>
+                                     </div>
+                                 </div>
+                             </div>` :
+                            `<div class="flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan opacity-60">
+                                    <path d="M18 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M18 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 4a2 2 0 1 0 4 0 2 2 0 1 0-4 0M2 20a2 2 0 1 0 4 0 2 2 0 1 0-4 0M22 12h-4M6 12h4M12 12h4"/>
+                                    <rect width="4" height="6" x="10" y="9" rx="2"/>
+                                </svg>
+                            </div>
+                            <button class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity" aria-label="Reproduzir ${exercicio.nome}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                            </button>`
+                        }
                     </div>
                     <div class="p-4">
                         <div class="flex justify-between items-start mb-2">
@@ -1297,9 +1397,47 @@
                         </div>
                     </div>`;
                 const playBtn = card.querySelector('button');
-                playBtn.addEventListener('click', () => openVideoCordova(exercicio.video, exercicio.nome));
+                playBtn.addEventListener('click', () => {
+                    if (document.getElementById('videoModal')) {
+                        openVideoInline(exercicio.video);
+                    } else {
+                        openVideoCordova(exercicio.video, exercicio.nome);
+                    }
+                });
+                // skeleton -> fade-in
+                const imgEl = card.querySelector('img');
+                const skeleton = card.querySelector('[data-skeleton]');
+                if (imgEl && skeleton) {
+                    imgEl.addEventListener('load', () => {
+                        skeleton.remove();
+                        imgEl.classList.remove('opacity-0');
+                    }, { once: true });
+                }
                 listContainer.appendChild(card);
             });
+        }
+
+        // Função para extrair ID do YouTube
+        function getYoutubeId(url) {
+            if (!url || !url.startsWith('http')) return '';
+            if (url.includes('youtu.be/')) {
+                return url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/watch?v=')) {
+                return url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtube.com/shorts/')) {
+                return url.split('shorts/')[1].split('?')[0];
+            }
+            return '';
+        }
+
+        // Retorna thumbnails (hq e maxres) do YouTube
+        function getYoutubeThumbs(url) {
+            const id = getYoutubeId(url);
+            if (!id) return { hq: '', maxres: '' };
+            return {
+                hq: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+                maxres: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+            };
         }
         
         function openVideo(videoUrl, exerciseName) {
@@ -1391,6 +1529,42 @@
                 alert(`Vídeo não disponível para: ${exerciseName}`);
             }
         }
+
+        // Reprodução embutida via modal
+        function openVideoInline(videoUrl) {
+            if (!videoUrl || !videoUrl.startsWith('http')) return;
+            let videoId = '';
+            if (videoUrl.includes('youtu.be/')) {
+                videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+            } else if (videoUrl.includes('youtube.com/watch?v=')) {
+                videoId = videoUrl.split('v=')[1].split('&')[0];
+            } else if (videoUrl.includes('youtube.com/shorts/')) {
+                videoId = videoUrl.split('shorts/')[1].split('?')[0];
+            }
+            if (!videoId) return;
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            const closeBtn = document.getElementById('videoCloseBtn');
+            if (!modal || !iframe) return;
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (closeBtn) setTimeout(() => closeBtn.focus(), 0);
+            // ESC para fechar
+            document.addEventListener('keydown', handleEscClose);
+        }
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            if (!modal || !iframe) return;
+            iframe.src = '';
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', handleEscClose);
+        }
+        function handleEscClose(e) {
+            if (e.key === 'Escape') closeVideoModal();
+        }
         
         function switchEnvironment(environment) {
             const academiaBtn = document.getElementById('academiaBtn');
@@ -1407,14 +1581,17 @@
             // Atualiza o ambiente no treino atual se existir
             if (window.currentWorkout) {
                 window.currentWorkout.local = environment;
-                // Regera o cronograma completo com base no novo ambiente
-                const novoCronograma = generateWeeklySchedule(
-                    window.currentWorkout.frequencia,
-                    window.currentWorkout.objetivo,
-                    environment,
-                    window.currentWorkout.limitacoes
-                );
-                window.currentWorkout.cronograma = novoCronograma;
+                
+                // Sempre partimos do cronograma original gerado na criação do treino
+                const base = deepClone(window.currentWorkout.originalCronograma || window.currentWorkout.cronograma);
+                
+                if (environment === 'casa') {
+                    window.currentWorkout.cronograma = adaptCronogramaForHome(base);
+                } else {
+                    // academia: restaura o cronograma original
+                    window.currentWorkout.cronograma = base;
+                }
+                
                 // Reconfigura a semana e treinos exibidos
                 setupWeeklySchedule(window.currentWorkout);
                 switchWeek(1);
@@ -1600,6 +1777,38 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadSampleWorkoutOnLoad();
         });
+        
+        // Utilitário: deep clone simples
+        function deepClone(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        }
+        
+        // Adapta o cronograma para treinos em casa mantendo a mesma estrutura/quantidade
+        function adaptCronogramaForHome(cronograma) {
+            if (!cronograma || !cronograma.estrutura) return cronograma;
+            const estrutura = cronograma.estrutura;
+            Object.keys(estrutura).forEach(semanaKey => {
+                const semana = estrutura[semanaKey];
+                Object.keys(semana).forEach(treinoKey => {
+                    const treino = semana[treinoKey];
+                    const grupos = treino.grupos || [];
+                    const fallbacks = grupos.flatMap(g => getHomeExercises(g));
+                    let fbIdx = 0;
+                    const novos = treino.exercicios.map(ex => {
+                        if (isHomeBodyweight(ex.nome)) return ex; // já é bom para casa
+                        // escolhe fallback cíclico
+                        let sub = fallbacks[fbIdx % Math.max(fallbacks.length, 1)] || {
+                            nome: 'Burpee', video: 'https://youtu.be/1u6zjC2QUL8', series: 3, reps: '10-15', descanso: '60s', grupo: 'composto'
+                        };
+                        fbIdx++;
+                        return sub;
+                    });
+                    // garante tamanho igual
+                    treino.exercicios = novos.slice(0, treino.exercicios.length);
+                });
+            });
+            return cronograma;
+        }
     </script>
     
     <!-- Framework7 JS -->
